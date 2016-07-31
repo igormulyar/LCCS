@@ -24,11 +24,12 @@ public class ExcelHandler {
 
         HSSFWorkbook myExcelBook = new HSSFWorkbook(new FileInputStream(new File(filePath)));
         HSSFSheet myExcelSheet = myExcelBook.getSheet(sheetName);
-        HSSFRow row = myExcelSheet.getRow(1);
+
          System.out.println("Last column number:"+myExcelSheet.getLastRowNum());
         List<String> IDList = new ArrayList<String>();
 
         for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
+            HSSFRow row = myExcelSheet.getRow(i);
             if(row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING){
                 String ID = row.getCell(0).getStringCellValue();
                 System.out.println("ID #\""+i+"\" : " + ID);
