@@ -15,6 +15,7 @@
             <artifactId>poi</artifactId>
             <version>3.12</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -23,8 +24,8 @@
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.0.0-beta1</version>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>2.53.1</version>
         </dependency>
 
 
