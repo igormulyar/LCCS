@@ -14,32 +14,36 @@ import java.util.List;
 /**
  * Created by TRUST on 29.07.2016.
  */
-public class ExcelHandler {
+public class ExcelHandler implements FileIOHandler {
 
-    private String filePath = "C:\\MyTable.xls";
-    private String sheetName = "Лист3";
+    private HSSFWorkbook myExcelBook;
+    private HSSFSheet myExcelSheet;
 
 
-    public ExcelHandler() throws IOException {
+    public ExcelHandler(String filePath, String sheetName) throws IOException {
+        myExcelBook = new HSSFWorkbook(new FileInputStream(new File(filePath)));
+        myExcelSheet = myExcelBook.getSheet(sheetName);
 
-        HSSFWorkbook myExcelBook = new HSSFWorkbook(new FileInputStream(new File(filePath)));
-        HSSFSheet myExcelSheet = myExcelBook.getSheet(sheetName);
+    }
 
-         System.out.println("Last column number:"+myExcelSheet.getLastRowNum());
+    public List<String> getIDList() throws IOException {
         List<String> IDList = new ArrayList<String>();
-
         for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
             HSSFRow row = myExcelSheet.getRow(i);
             if(row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING){
                 String ID = row.getCell(0).getStringCellValue();
-                System.out.println("ID #\""+i+"\" : " + ID);
+                //System.out.println("ID #\""+i+"\" : " + ID);
                 IDList.add(ID);
             } else {
-                System.out.println("Something wrong with cell type. Uncorrect cell type.");
+                System.out.println("Something wrong with cell type. Wrong cell type.");
             }
         }
-
         myExcelBook.close();
+        return IDList;
+    }
+
+    public boolean writeAllTheInfo(List<Case> listOfRows) {
+        return false;
     }
 
 
