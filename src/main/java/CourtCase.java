@@ -3,7 +3,7 @@ import java.time.LocalDate;
 /**
  * Created by Yuzer on 01.08.2016.
  */
-public class Case {
+public class CourtCase {
     private String caseID;
     private String description;
     private String court;
@@ -12,11 +12,11 @@ public class Case {
 
 
     //CONSTRUCTORS
-    public Case(String caseID) {
+    public CourtCase(String caseID) {
         this.caseID = caseID;
     }
 
-    public Case(String caseID, String description, String court, String judge, LocalDate date) {
+    public CourtCase(String caseID, String description, String court, String judge, LocalDate date) {
         this.caseID = caseID;
         this.description = description;
         this.court = court;

@@ -1,4 +1,3 @@
-import org.apache.poi.hssf.record.pivottable.StreamIDRecord;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -6,7 +5,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,9 @@ public class ExcelHandler implements FileIOHandler {
         return IDList;
     }
 
-    public boolean writeAllTheInfo(List<Case> listOfRows) {
+    public boolean writeAllTheInfo(List<CourtCase> listOfRows) {
+
+
         return false;
     }
 
