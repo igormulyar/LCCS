@@ -8,6 +8,6 @@ public interface FileIOHandler {
 
     List<String> getIDList() throws IOException;
 
-    boolean writeAllTheInfo (List<CourtCase> listOfRows);
+    void writeAllTheInfo (List<CourtCase> listOfRows) throws IOException;
 
 }

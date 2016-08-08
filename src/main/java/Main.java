@@ -20,7 +20,7 @@ public class Main {
 
         fileIOHandler.writeAllTheInfo(resultList);
 
-
+        System.out.println("Done!");
 
 
 
