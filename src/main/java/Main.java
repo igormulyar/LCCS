@@ -12,14 +12,12 @@ public class Main {
         FileIOHandler fileIOHandler = new ExcelHandler("C:\\MyTable.xls", "Лист3");
         List<String> IDList = fileIOHandler.getIDList();
 
-
         List<CourtCase> resultList = new ArrayList<CourtCase>();
         for (String caseID : IDList){
             resultList.add(new SeleniumCaseExtractor().getCaseInfo(caseID));
         }
 
         fileIOHandler.writeAllTheInfo(resultList);
-
         System.out.println("Done!");
 
 

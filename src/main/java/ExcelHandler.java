@@ -16,13 +16,13 @@ public class ExcelHandler implements FileIOHandler {
     private HSSFSheet myExcelSheet;
     private File file;
 
-
     public ExcelHandler(String filePath, String sheetName) throws IOException {
         this.file = new File(filePath);
         myExcelBook = new HSSFWorkbook(new FileInputStream(file));
         myExcelSheet = myExcelBook.getSheet(sheetName);
 
     }
+
 
     public List<String> getIDList() throws IOException {
         List<String> IDList = new ArrayList<String>();
@@ -52,8 +52,9 @@ public class ExcelHandler implements FileIOHandler {
         for (CourtCase courtCase : listOfRows){
             writeOneRow(courtCase);
         }
-        for (int i=0; i<5;i++)
-        myExcelSheet.autoSizeColumn(i);
+        for (int i=0; i<5;i++) {
+            myExcelSheet.autoSizeColumn(i);
+        }
     }
 
     private void writeOneRow(CourtCase courtCase) throws IOException {

@@ -29,6 +29,15 @@ public class CourtCase {
         return caseID;
     }
 
+    public String extractCourtIdByCaseId(){
+        char [] courtID = new char[4];
+        for (int i=0; i<4; i++){
+            courtID[i] = caseID.toCharArray()[i];
+        }
+        System.out.println(courtID.toString());
+        return courtID.toString();
+    }
+
     public String getDescription() {
         return description;
     }
