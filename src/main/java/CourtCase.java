@@ -4,20 +4,26 @@ import java.time.LocalDate;
  * Created by Yuzer on 01.08.2016.
  */
 public class CourtCase {
-    private String caseID;
-    private String description;
-    private String court;
-    private String judge;
+
     private LocalDate date;
+    private String judge;
+    private String forma;
+    private String number;
+    private String involved;
+    private String description;
+    private String add_address;
+    private String court;
+
+
 
 
     //CONSTRUCTORS
-    public CourtCase(String caseID) {
-        this.caseID = caseID;
+    public CourtCase(String number) {
+        this.number = number;
     }
 
-    public CourtCase(String caseID, String description, String court, String judge, LocalDate date) {
-        this.caseID = caseID;
+    public CourtCase(String number, String description, String court, String judge, LocalDate date) {
+        this.number = number;
         this.description = description;
         this.court = court;
         this.judge = judge;
@@ -25,14 +31,14 @@ public class CourtCase {
     }
 
     //GETTERS
-    public String getCaseID() {
-        return caseID;
+    public String getNumber() {
+        return number;
     }
 
     public String extractCourtIdByCaseId(){
         char [] courtID = new char[4];
         for (int i=0; i<4; i++){
-            courtID[i] = caseID.toCharArray()[i];
+            courtID[i] = number.toCharArray()[i];
         }
         System.out.println(courtID.toString());
         return courtID.toString();

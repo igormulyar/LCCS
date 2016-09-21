@@ -58,11 +58,11 @@ public class ExcelHandler implements FileIOHandler {
     }
 
     private void writeOneRow(CourtCase courtCase) throws IOException {
-        courtCase.getCaseID();
+        courtCase.getNumber();
 
         for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
             HSSFRow row = myExcelSheet.getRow(i);
-            if (row.getCell(0).toString().equals(courtCase.getCaseID())){
+            if (row.getCell(0).toString().equals(courtCase.getNumber())){
                 row.getCell(1).setCellValue(courtCase.getDescription());
                 row.getCell(2).setCellValue(courtCase.getCourt());
                 row.getCell(3).setCellValue(courtCase.getJudge());
