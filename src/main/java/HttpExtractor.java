@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpExtractor {
+public class HttpExtractor implements Extractor {
 
     public List<CourtCase> getCourtCases (String url, String referer, int courtId) throws  IOException {
         HttpResponse<JsonNode> jsonResponse = null;
@@ -55,5 +55,15 @@ public class HttpExtractor {
                 jsonCase.getString("forma"),
                 jsonCase.getString("add_address")
         );
+    }
+
+    public CourtCase getCase(String caseNumber) {
+        //определить, какой суд по номеру дела - получить url, referer, court_id.
+        //используя вышеуканные данные получить список дел по указанному суду
+        //выбрать дело по соответствию номера, вернуть ссылку в вызывающий меод
+        //
+
+
+        return null;
     }
 }

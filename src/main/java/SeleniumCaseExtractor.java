@@ -4,10 +4,10 @@
  */
 public class SeleniumCaseExtractor implements Extractor {
 
-    public CourtCase getCaseInfo(String caseID) {
+    public CourtCase getCase(String caseNumber) {
         String link = "";
         new CourtCase("522/1516/16").extractCourtIdFromNumber();
-        return searchByLink(caseID, link);
+        return searchByLink(caseNumber, link);
     }
 
     private CourtCase searchByLink(String caseID,String link){

@@ -14,7 +14,7 @@ public class Main {
 
         List<CourtCase> resultList = new ArrayList<CourtCase>();
         for (String caseID : IDList){
-            resultList.add(new SeleniumCaseExtractor().getCaseInfo(caseID));
+            resultList.add(new SeleniumCaseExtractor().getCase(caseID));
         }
 
         fileIOHandler.writeAllTheInfo(resultList);

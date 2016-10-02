@@ -3,5 +3,5 @@
  */
 public interface Extractor {
 
-    CourtCase getCaseInfo(String caseID);
+    CourtCase getCase(String caseNumber);
 }
