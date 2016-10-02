@@ -1,0 +1,34 @@
+[
+{
+"name":"Приморський районний суд м. Одеси",
+"idInNumber":"522",
+"courtId":"1522",
+"url":"http://pm.od.court.gov.ua/new.php",
+"host":"pm.od.court.gov.ua",
+"referer":"http://pm.od.court.gov.ua/sud1522/csz/"
+}
+{
+"name":"Київський районний суд м. Одеи",
+"idInNumber":"520",
+"courtId":"1512",
+"url":"http://ki.od.court.gov.ua/new.php",
+"host":"ki.od.court.gov.ua",
+"referer":"http://ki.od.court.gov.ua/sud1512/automated-court-management-system/csz/"
+}
+{
+"name":"Малиновський районний суд м. Одеси",
+"idInNumber":"521",
+"courtId":"1519",
+"url":"http://ml.od.court.gov.ua/new.php",
+"host":"ml.od.court.gov.ua",
+"referer":"http://ml.od.court.gov.ua/sud1519/csz/"
+}
+{
+"name":"Суворовський районний суд м. Одеси",
+"idInNumber":"523",
+"courtId":"1527",
+"url":"http://sv.od.court.gov.ua/new.php",
+"host":"sv.od.court.gov.ua",
+"referer":"http://sv.od.court.gov.ua/sud1527/csz/"
+}
+]
