@@ -1,74 +1,75 @@
-import java.time.LocalDate;
 
 /**
- * Created by Yuzer on 01.08.2016.
+ * Created by igor on 21.09.16.
  */
+
 public class CourtCase {
-    private String caseID;
+
+    private String date;
+    private String number;
+    private String involved;
     private String description;
-    private String court;
     private String judge;
-    private LocalDate date;
+    private String forma;
+    private String add_address;
 
 
-    //CONSTRUCTORS
-    public CourtCase(String caseID) {
-        this.caseID = caseID;
-    }
-
-    public CourtCase(String caseID, String description, String court, String judge, LocalDate date) {
-        this.caseID = caseID;
-        this.description = description;
-        this.court = court;
-        this.judge = judge;
+    public CourtCase(String date, String number, String involved, String description, String judge, String forma, String add_address) {
         this.date = date;
+        this.number = number;
+        this.involved = involved;
+        this.description = description;
+        this.judge = judge;
+        this.forma = forma;
+        this.add_address = add_address;
     }
 
-    //GETTERS
-    public String getCaseID() {
-        return caseID;
+    public CourtCase (String number){
+        this.number = number;
     }
 
-    public String extractCourtIdByCaseId(){
-        char [] courtID = new char[4];
-        for (int i=0; i<4; i++){
-            courtID[i] = caseID.toCharArray()[i];
-        }
-        System.out.println(courtID.toString());
-        return courtID.toString();
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getCourt() {
-        return court;
+    public String getDate() {
+        return date;
     }
 
     public String getJudge() {
         return judge;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getForma() {
+        return forma;
     }
 
-
-    //SETTERS
-    public void setCourt(String court) {
-        this.court = court;
+    public String getNumber() {
+        return number;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getInvolved() {
+        return involved;
     }
 
-    public void setJudge(String judge) {
-        this.judge = judge;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public String getAdd_address() {
+        return add_address;
+    }
+
+    public String extractCourtIdFromNumber(){
+        return number.substring(0,2);
+    }
+
+    @Override
+    public String toString() {
+        return "CourtCase{" + "\n" +
+                "date=" + date + "\n" +
+                "number=" + number + "\n" +
+                "involved=" + involved + "\n" +
+                "description=" + description + "\n" +
+                "judge=" + judge + "\n" +
+                "forma=" + forma + "\n" +
+                "add_address=" + add_address + "\n" +
+                '}';
     }
 }

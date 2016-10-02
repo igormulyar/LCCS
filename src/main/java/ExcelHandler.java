@@ -25,23 +25,23 @@ public class ExcelHandler implements FileIOHandler {
 
 
     public List<String> getIDList() throws IOException {
-        List<String> IDList = new ArrayList<String>();
+        List<String> caseNumberList = new ArrayList<String>();
         for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
             HSSFRow row = myExcelSheet.getRow(i);
-            if(row.getCell(0).getCellType() == HSSFCell.CELL_TYPE_STRING){
-                String ID = row.getCell(0).getStringCellValue();
+            if(row.getCell(1).getCellType() == HSSFCell.CELL_TYPE_STRING){
+                String caseNumber = row.getCell(1).getStringCellValue();
                 rowInit(row);
-                IDList.add(ID);
+                caseNumberList.add(caseNumber);
             } else {
                 throw new IOException("Wrong cell type in a table!");
             }
         }
         myExcelBook.close();
-        return IDList;
+        return caseNumberList;
     }
 
     private void rowInit(HSSFRow row) {
-        for (int i=1; i<5; i++){
+        for (int i=0; i<7; i++){
             if(row.getCell(i)==null){row.createCell(i);}
         }
         //TODO implement the feature with fucking Excel data type - after its implementation in writeOneRow method
@@ -57,16 +57,17 @@ public class ExcelHandler implements FileIOHandler {
         }
     }
 
-    private void writeOneRow(CourtCase courtCase) throws IOException {
-        courtCase.getCaseID();
-
+    private void writeOneRow(CourtCase courtCase) throws IOException { //TODO method for writting the case to the table by court and involved
         for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
             HSSFRow row = myExcelSheet.getRow(i);
-            if (row.getCell(0).toString().equals(courtCase.getCaseID())){
-                row.getCell(1).setCellValue(courtCase.getDescription());
-                row.getCell(2).setCellValue(courtCase.getCourt());
-                row.getCell(3).setCellValue(courtCase.getJudge());
-                row.getCell(4).setCellValue(courtCase.getDate().toString()); //TODO implement compatibility with Excel date
+            if (row.getCell(1).toString().equals(courtCase.getNumber()) ){
+                row.getCell(0).setCellValue(courtCase.getDate());
+                row.getCell(1).setCellValue(courtCase.getNumber());
+                row.getCell(2).setCellValue(courtCase.getInvolved());
+                row.getCell(3).setCellValue(courtCase.getDescription());
+                row.getCell(4).setCellValue(courtCase.getJudge());
+                row.getCell(5).setCellValue(courtCase.getForma());
+                row.getCell(6).setCellValue(courtCase.getAdd_address());
             }
         }
         myExcelBook.write(new FileOutputStream(file));
