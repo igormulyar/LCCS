@@ -24,9 +24,9 @@ public class CourtCase {
         this.add_address = add_address;
     }
 
-    public CourtCase (String number){
+    /*public CourtCase (String number){
         this.number = number;
-    }
+    }*/
 
     public String getDate() {
         return date;

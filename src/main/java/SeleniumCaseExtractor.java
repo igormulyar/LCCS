@@ -6,7 +6,6 @@ public class SeleniumCaseExtractor implements Extractor {
 
     public CourtCase getCase(String caseNumber) {
         String link = "";
-        new CourtCase("522/1516/16").extractCourtIdFromNumber();
         return searchByLink(caseNumber, link);
     }
 

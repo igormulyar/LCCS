@@ -1,5 +1,4 @@
 
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -13,7 +12,34 @@ import java.util.List;
 
 public class HttpExtractor implements Extractor {
 
-    public List<CourtCase> getCourtCases (String url, String referer, int courtId) throws  IOException {
+    public CourtCase getCase(String caseNumber) {
+        //определить, какой суд по номеру дела - получить url, referer, court_id.
+        //используя вышеуканные данные получить список дел по указанному суду
+        //выбрать дело по соответствию номера, вернуть ссылку в вызывающий меод
+        Court court = getCourtForRequest(caseNumber);
+        List<CourtCase> caseList = null;
+        try {
+            caseList = getCourtCases(court.getUrl(), court.getReferer(), court.getCourtId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (CourtCase c : caseList) {
+            if (c.getNumber().equals(caseNumber)) {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+
+    /*
+    This method makes a http POST-Request to the URL with headers and request body
+    url, referer-header and courtId are parameters used in order to make a correct request
+    returns a list of court cases fetched from server
+    */
+    private List<CourtCase> getCourtCases(String url, String referer, String courtId) throws IOException {
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             jsonResponse = Unirest.post("http://pm.od.court.gov.ua/new.php")
@@ -30,9 +56,7 @@ public class HttpExtractor implements Extractor {
             e.printStackTrace();
         }
 
-        //String requestString = jsonResponse.getBody().toString();
         JSONArray jsonArray = jsonResponse.getBody().getArray();
-        //JsonNode node = new JsonNode(jsonArray.get(0).toString());
 
         List<CourtCase> caseList = new ArrayList<CourtCase>();
 
@@ -45,6 +69,7 @@ public class HttpExtractor implements Extractor {
         return caseList;
     }
 
+    // convert json-object to court case
     private static CourtCase parseCourtCaseFromJson(JSONObject jsonCase) {
         return new CourtCase(
                 jsonCase.getString("date"),
@@ -57,13 +82,9 @@ public class HttpExtractor implements Extractor {
         );
     }
 
-    public CourtCase getCase(String caseNumber) {
-        //определить, какой суд по номеру дела - получить url, referer, court_id.
-        //используя вышеуканные данные получить список дел по указанному суду
-        //выбрать дело по соответствию номера, вернуть ссылку в вызывающий меод
-        //
-
-
+    // find out the information about court which is needed for making correct http-request.
+    // returns Court that consist url, referer, court_id and others
+    private Court getCourtForRequest(String caseNumber) {
         return null;
     }
 }

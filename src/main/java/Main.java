@@ -9,12 +9,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        FileIOHandler fileIOHandler = new ExcelHandler("/home/igor/Development/exceltable/table1.xls", "Лист1");
-        List<String> IDList = fileIOHandler.getIDList();
+        String unixPath = "/home/igor/Development/exceltable/table1.xls";
+        String winPath = "C:\\MyTable.xls";
+
+        FileIOHandler fileIOHandler = new ExcelHandler(unixPath, "Лист1");
+        List<String> IDList = fileIOHandler.getIDList(); // получаем список номеров дел из таблицы
+
 
         List<CourtCase> resultList = new ArrayList<CourtCase>();
-        for (String caseID : IDList){
-            resultList.add(new SeleniumCaseExtractor().getCase(caseID));
+        for (String caseID : IDList){  // итерируемся по списку номеров дел
+            resultList.add(new SeleniumCaseExtractor().getCase(caseID));  // при каждом проходе цикла запрашиваем дело по его номеру из списка
+                                                                            // и добавляем в список полученных дел
         }
 
         fileIOHandler.writeAllTheInfo(resultList);
