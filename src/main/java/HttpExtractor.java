@@ -21,13 +21,10 @@ import java.util.List;
 public class HttpExtractor implements Extractor {
 
     public CourtCase getCase(String caseNumber) {
-        //определить, какой суд по номеру дела - получить url, referer, court_id.
-        //используя вышеуканные данные получить список дел по указанному суду
-        //выбрать дело по соответствию номера, вернуть ссылку в вызывающий меод
-        Court court = getCourtForRequest(caseNumber);
+        Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in HttpExtractor.Court) using case number
         List<CourtCase> caseList = null;
         try {
-            caseList = getCourtCases(court.getUrl(), court.getReferer(), court.getCourtId());
+            caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,18 +44,18 @@ public class HttpExtractor implements Extractor {
     url, referer-header and courtId are parameters used in order to make a correct request
     returns a list of court cases fetched from server
     */
-    private List<CourtCase> getCourtCases(String url, String referer, String courtId) throws IOException {
+    private List<CourtCase> getCourtCases(String url, String host, String referer, String courtId) throws IOException {
         HttpResponse<JsonNode> jsonResponse = null;
         try {
-            jsonResponse = Unirest.post("http://pm.od.court.gov.ua/new.php")
-                    .header("Host", "pm.od.court.gov.ua")
+            jsonResponse = Unirest.post(url)
+                    .header("Host", host)
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Language", "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3")
                     .header("Accept-Encoding", "gzip, deflate")
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header("X-Requested-With", "XMLHttpRequest")
-                    .header("Referer", "http://pm.od.court.gov.ua/sud1522/csz/")
-                    .body("q_court_id=1522")
+                    .header("Referer", referer)
+                    .body(("q_court_id="+courtId))
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -91,7 +88,7 @@ public class HttpExtractor implements Extractor {
     }
 
     // find out the information about court which is needed for making correct http-request.
-    // returns Court that consist url, referer, court_id and others
+    // returns HttpExtractor.Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
         DocumentBuilderFactory domFactory;
         DocumentBuilder documentBuilder;
@@ -117,7 +114,54 @@ public class HttpExtractor implements Extractor {
             courtList.add(court);
         }
         //TODO Filtering STREAM !!!
-
+        for (Court court : courtList){
+            if (court.getIdInNumber().equals(caseNumber.substring(0,2))){
+                return court;
+            }
+        }
         return null;
+    }
+
+    private class Court {
+
+        private String name;
+        private String idInNumber;
+        private String courtId;
+        private String url;
+        private String host;
+        private String referer;
+
+        public Court(String name, String idInNumber, String courtId, String url, String host, String referer) {
+            this.name = name;
+            this.idInNumber = idInNumber;
+            this.courtId = courtId;
+            this.url = url;
+            this.host = host;
+            this.referer = referer;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getIdInNumber() {
+            return idInNumber;
+        }
+
+        public String getCourtId() {
+            return courtId;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getHost() {
+            return host;
+        }
+
+        public String getReferer() {
+            return referer;
+        }
     }
 }
