@@ -5,7 +5,15 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +93,31 @@ public class HttpExtractor implements Extractor {
     // find out the information about court which is needed for making correct http-request.
     // returns Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
+        DocumentBuilderFactory domFactory;
+        DocumentBuilder documentBuilder;
+        Document document = null;
+        try {
+            domFactory = DocumentBuilderFactory.newInstance();
+            documentBuilder = domFactory.newDocumentBuilder();
+            document = documentBuilder.parse(new File("src/courts.xml"));
+        } catch (IOException | ParserConfigurationException | SAXException e){
+            e.printStackTrace();
+        }
+
+        NodeList nodeList = document.getElementsByTagName("court");
+        List<Court> courtList = new ArrayList<>();
+        for (int i = 0; i<nodeList.getLength(); i++){
+            Element element = (Element)nodeList.item(i);
+            Court court = new Court (element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(),
+                    element.getElementsByTagName("idInNumber").item(0).getChildNodes().item(0).getNodeValue(),
+                    element.getElementsByTagName("courtId").item(0).getChildNodes().item(0).getNodeValue(),
+                    element.getElementsByTagName("url").item(0).getChildNodes().item(0).getNodeValue(),
+                    element.getElementsByTagName("host").item(0).getChildNodes().item(0).getNodeValue(),
+                    element.getElementsByTagName("referer").item(0).getChildNodes().item(0).getNodeValue());
+            courtList.add(court);
+        }
+        //TODO Filtering STREAM !!!
+
         return null;
     }
 }
