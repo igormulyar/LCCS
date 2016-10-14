@@ -23,12 +23,11 @@ public class ExcelHandler implements FileIOHandler {
 
     }
 
-
     public List<String> getIDList() throws IOException {
         List<String> caseNumberList = new ArrayList<String>();
-        for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
+        for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
-            if(row.getCell(1).getCellType() == HSSFCell.CELL_TYPE_STRING){
+            if (row.getCell(1).getCellType() == HSSFCell.CELL_TYPE_STRING) {
                 String caseNumber = row.getCell(1).getStringCellValue();
                 rowInit(row);
                 caseNumberList.add(caseNumber);
@@ -40,27 +39,47 @@ public class ExcelHandler implements FileIOHandler {
         return caseNumberList;
     }
 
-    private void rowInit(HSSFRow row) {
-        for (int i=0; i<7; i++){
-            if(row.getCell(i)==null){row.createCell(i);}
+    public List<CourtCase> readCurrentListOfCases (){
+        List<CourtCase> caseList = new ArrayList<>();
+        for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
+            HSSFRow row = myExcelSheet.getRow(i);
+            CourtCase courtCase = new CourtCase(
+                    row.getCell(0).getStringCellValue(),
+                    row.getCell(1).getStringCellValue(),
+                    row.getCell(2).getStringCellValue(),
+                    row.getCell(3).getStringCellValue(),
+                    row.getCell(4).getStringCellValue(),
+                    row.getCell(5).getStringCellValue(),
+                    row.getCell(6).getStringCellValue()
+            );
+            caseList.add(courtCase);
         }
-        //TODO implement the feature with fucking Excel data type - after its implementation in writeOneRow method
+        return caseList;
     }
 
+    //Private methods...
     public void writeAllTheInfo(List<CourtCase> listOfRows) throws IOException {
 
-        for (CourtCase courtCase : listOfRows){
+        for (CourtCase courtCase : listOfRows) {
             writeOneRow(courtCase);
         }
-        for (int i=0; i<5;i++) {
+        for (int i = 0; i < 5; i++) {
             myExcelSheet.autoSizeColumn(i);
         }
     }
 
+    private void rowInit(HSSFRow row) {
+        for (int i = 0; i < 7; i++) {
+            if (row.getCell(i) == null) {
+                row.createCell(i);
+            }
+        }
+    }
+
     private void writeOneRow(CourtCase courtCase) throws IOException { //TODO method for writting the case to the table by court and involved
-        for (int i=1; i<=myExcelSheet.getLastRowNum(); i++){
+        for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
-            if (row.getCell(1).toString().equals(courtCase.getNumber()) ){
+            if (row.getCell(1).toString().equals(courtCase.getNumber())) {
                 row.getCell(0).setCellValue(courtCase.getDate());
                 row.getCell(1).setCellValue(courtCase.getNumber());
                 row.getCell(2).setCellValue(courtCase.getInvolved());
