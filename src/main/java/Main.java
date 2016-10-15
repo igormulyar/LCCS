@@ -12,19 +12,33 @@ public class Main {
         String unixPath = "/home/igor/Development/exceltable/table1.xls";
         String winPath = "C:\\MyTable.xls";
 
-        FileIOHandler fileIOHandler = new ExcelHandler(unixPath, "Лист1");
-        List<String> IDList = fileIOHandler.getIDList(); // получаем список номеров дел из таблицы
+        Controller controller = new Controller(unixPath);
+        System.out.println(controller.showCurrentCases());
 
-
-        List<CourtCase> resultList = new ArrayList<CourtCase>();
-        for (String caseID : IDList){  // итерируемся по списку номеров дел
-            resultList.add(new SeleniumCaseExtractor().getCase(caseID));  // при каждом проходе цикла запрашиваем дело по его номеру из списка
-                                                                            // и добавляем в список полученных дел
+        /*OUTPUT:
+        [CourtCase{
+        date  =хз
+        number = 520/1553/16-ц
+        involved = Позивач: Малигін Олександр Геннадійович, відповідач: Малигіна Єлизавета Вікторівна
+        description = усунення від права спадкування за правом представлення
+        judge = Луняченко
+        forma = цивільна
+        add_address = хз
         }
+        , CourtCase{
+        date  =хз
+        number = 522/11272/16-ц
+        involved = хз
+        description = хз
+        judge = хз
+        forma = хз
+        add_address = хз
+        }
+        ............
+        */
 
-        fileIOHandler.writeAllTheInfo(resultList);
-        System.out.println("Done!");
-
+        controller.updateCaseList();
+        System.out.println(controller.showCurrentCases());
 
     }
 }

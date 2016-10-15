@@ -56,20 +56,20 @@ public class CourtCase {
         return add_address;
     }
 
-    public String extractCourtIdFromNumber(){
-        return number.substring(0,2);
+    public String extractCourtIdFromNumber() {
+        return number.substring(0, 2);
     }
 
     @Override
     public String toString() {
         return "CourtCase{" + "\n" +
-                "date=" + date + "\n" +
-                "number=" + number + "\n" +
-                "involved=" + involved + "\n" +
-                "description=" + description + "\n" +
-                "judge=" + judge + "\n" +
-                "forma=" + forma + "\n" +
-                "add_address=" + add_address + "\n" +
-                '}';
+                "date  =" + date + "\n" +
+                "number = " + number + "\n" +
+                "involved = " + involved + "\n" +
+                "description = " + description + "\n" +
+                "judge = " + judge + "\n" +
+                "forma = " + forma + "\n" +
+                "add_address = " + add_address + "\n" +
+                '}'+"\n";
     }
 }

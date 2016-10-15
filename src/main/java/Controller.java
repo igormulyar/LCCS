@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,20 +8,48 @@ import java.util.List;
 public class Controller {
 
     private List<CourtCase> caseList;
-    {
+    private FileIOHandler IOHandler;
+    private Extractor extractor = new HttpExtractor();
+
+    public Controller(String filePath) {
         try {
-            caseList = new ExcelHandler().readCurrentListOfCases();
+            IOHandler = new ExcelHandler(filePath, "Лист1");
+            caseList = IOHandler.readCurrentListOfCases();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public List<CourtCase> showCurrentCases(){
+    //methods to use
+
+    public List<CourtCase> showCurrentCases() {
         return caseList;
     }
 
-    public void updateCaseList(){
+    public void updateCaseList() {
+        List<String> IDList;
+        try {
+            IDList = IOHandler.getIDList();
+            List<CourtCase> resultList = new ArrayList<CourtCase>();
 
+            for (String caseID : IDList) {
+                resultList.add(extractor.getCase(caseID));
+            }
+
+            IOHandler.writeAllTheInfo(resultList);
+            caseList = resultList;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addCase(String caseNumber) {
+        //will be implemented later
+    }
+
+    public void deleteCase(String caseNumber) {
+        // will be implemented later
     }
 
 

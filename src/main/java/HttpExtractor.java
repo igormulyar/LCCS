@@ -55,7 +55,7 @@ public class HttpExtractor implements Extractor {
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header("X-Requested-With", "XMLHttpRequest")
                     .header("Referer", referer)
-                    .body(("q_court_id="+courtId))
+                    .body(("q_court_id=" + courtId))
                     .asJson();
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class HttpExtractor implements Extractor {
             caseList.add(parseCourtCaseFromJson(new JsonNode(jsonArray.get(i).toString()).getObject()));
         }
 
-        System.out.println(caseList.get(7).toString());
+        //System.out.println(caseList.get(7).toString()); //WTF???
 
         return caseList;
     }
@@ -97,15 +97,15 @@ public class HttpExtractor implements Extractor {
             domFactory = DocumentBuilderFactory.newInstance();
             documentBuilder = domFactory.newDocumentBuilder();
             document = documentBuilder.parse(new File("src/courts.xml"));
-        } catch (IOException | ParserConfigurationException | SAXException e){
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
 
         NodeList nodeList = document.getElementsByTagName("court");
         List<Court> courtList = new ArrayList<>();
-        for (int i = 0; i<nodeList.getLength(); i++){
-            Element element = (Element)nodeList.item(i);
-            Court court = new Court (element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(),
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element element = (Element) nodeList.item(i);
+            Court court = new Court(element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue(),
                     element.getElementsByTagName("idInNumber").item(0).getChildNodes().item(0).getNodeValue(),
                     element.getElementsByTagName("courtId").item(0).getChildNodes().item(0).getNodeValue(),
                     element.getElementsByTagName("url").item(0).getChildNodes().item(0).getNodeValue(),
@@ -114,8 +114,8 @@ public class HttpExtractor implements Extractor {
             courtList.add(court);
         }
         //TODO Filtering STREAM !!!
-        for (Court court : courtList){
-            if (court.getIdInNumber().equals(caseNumber.substring(0,2))){
+        for (Court court : courtList) {
+            if (court.getIdInNumber().equals(caseNumber.substring(0, 3))) {
                 return court;
             }
         }
