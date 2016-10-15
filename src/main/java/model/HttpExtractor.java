@@ -1,5 +1,13 @@
 package model;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -10,14 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HttpExtractor implements Extractor {
 
@@ -36,7 +36,7 @@ public class HttpExtractor implements Extractor {
             }
         }
 
-        return null;
+        return null;// TODO avoid this
     }
 
 
@@ -45,10 +45,10 @@ public class HttpExtractor implements Extractor {
     url, referer-header and courtId are parameters used in order to make a correct request
     returns a list of court cases fetched from server
     */
-    private List<CourtCase> getCourtCases(String url, String host, String referer, String courtId) throws IOException {
+    private List<CourtCase> getCourtCases(String url, String host, String referer, String courtId) throws IOException { //TODO: catch this exception
         HttpResponse<JsonNode> jsonResponse = null;
         try {
-            jsonResponse = Unirest.post(url)
+            jsonResponse = Unirest.post(url)// TODO spring RestTemplate could be used insted
                     .header("Host", host)
                     .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Language", "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3")
@@ -62,7 +62,7 @@ public class HttpExtractor implements Extractor {
             e.printStackTrace();
         }
 
-        JSONArray jsonArray = jsonResponse.getBody().getArray();
+        JSONArray jsonArray = jsonResponse.getBody().getArray();//TODO: IDEA points that here null pointer exception possible
 
         List<CourtCase> caseList = new ArrayList<CourtCase>();
 
@@ -76,6 +76,7 @@ public class HttpExtractor implements Extractor {
     }
 
     // convert json-object to court case
+    // TODO: jackson ObjectMapper can do this automatically
     private static CourtCase parseCourtCaseFromJson(JSONObject jsonCase) {
         return new CourtCase(
                 jsonCase.getString("date"),
@@ -91,6 +92,8 @@ public class HttpExtractor implements Extractor {
     // find out the information about court which is needed for making correct http-request.
     // returns model.HttpExtractor.Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
+        //TODO: I do not understand why you have picked an XML for this. JSON is more convenient, and Jackson can do all this job automatically.
+        //or even simpler way: use java serialization
         DocumentBuilderFactory domFactory;
         DocumentBuilder documentBuilder;
         Document document = null;
@@ -120,10 +123,10 @@ public class HttpExtractor implements Extractor {
                 return court;
             }
         }
-        return null;
+        return null;// TODO: really bad thing. If this is valid case use Optional<Court> as return type. If this is exceptional situation - throw an exception.
     }
 
-    private class Court {
+    private class Court {// TODO: extract to separate file (in model package)
 
         private String name;
         private String idInNumber;
