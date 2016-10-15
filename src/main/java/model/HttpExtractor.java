@@ -1,3 +1,4 @@
+package model;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -21,7 +22,7 @@ import java.util.List;
 public class HttpExtractor implements Extractor {
 
     public CourtCase getCase(String caseNumber) {
-        Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in HttpExtractor.Court) using case number
+        Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in model.HttpExtractor.Court) using case number
         List<CourtCase> caseList = null;
         try {
             caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
@@ -88,7 +89,7 @@ public class HttpExtractor implements Extractor {
     }
 
     // find out the information about court which is needed for making correct http-request.
-    // returns HttpExtractor.Court that consist url, referer, court_id and others
+    // returns model.HttpExtractor.Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
         DocumentBuilderFactory domFactory;
         DocumentBuilder documentBuilder;

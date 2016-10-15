@@ -1,3 +1,5 @@
+package model;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -43,9 +45,9 @@ public class ExcelHandler implements FileIOHandler {
         List<CourtCase> caseList = new ArrayList<>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
-            for (int cellIndex=0; cellIndex<7; cellIndex++) {
+            for (int cellIndex = 0; cellIndex < 7; cellIndex++) {
                 if (row.getCell(cellIndex) == null) {
-                    row.createCell(cellIndex,HSSFCell.CELL_TYPE_STRING);
+                    row.createCell(cellIndex, HSSFCell.CELL_TYPE_STRING);
                     row.getCell(cellIndex).setCellValue("\"NO DATA\"");
                 }
             }

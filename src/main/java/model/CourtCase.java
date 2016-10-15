@@ -1,3 +1,4 @@
+package model;
 
 /**
  * Created by igor on 21.09.16.
@@ -24,7 +25,7 @@ public class CourtCase {
         this.add_address = add_address;
     }
 
-    /*public CourtCase (String number){
+    /*public model.CourtCase (String number){
         this.number = number;
     }*/
 
@@ -62,7 +63,7 @@ public class CourtCase {
 
     @Override
     public String toString() {
-        return "CourtCase{" + "\n" +
+        return "model.CourtCase{" + "\n" +
                 "date  =" + date + "\n" +
                 "number = " + number + "\n" +
                 "involved = " + involved + "\n" +
@@ -70,6 +71,6 @@ public class CourtCase {
                 "judge = " + judge + "\n" +
                 "forma = " + forma + "\n" +
                 "add_address = " + add_address + "\n" +
-                '}'+"\n";
+                '}' + "\n";
     }
 }

@@ -1,6 +1,6 @@
+import controller.Controller;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by TRUST on 12.07.2016.
@@ -16,7 +16,7 @@ public class Main {
         System.out.println(controller.showCurrentCases());
 
         /*OUTPUT:
-        [CourtCase{
+        [model.CourtCase{
         date  =хз
         number = 520/1553/16-ц
         involved = Позивач: Малигін Олександр Геннадійович, відповідач: Малигіна Єлизавета Вікторівна
@@ -25,7 +25,7 @@ public class Main {
         forma = цивільна
         add_address = хз
         }
-        , CourtCase{
+        , model.CourtCase{
         date  =хз
         number = 522/11272/16-ц
         involved = хз
@@ -41,7 +41,7 @@ public class Main {
         System.out.println(controller.showCurrentCases());
 
         /*OUTPUT AFTER UPDATING THE CASE LIST:
-        [CourtCase{
+        [model.CourtCase{
         date  =01.12.2016 10:00
         number = 520/1553/16-ц
         involved = Позивач: Малигін Олександр Геннадійович, відповідач: Малигіна Єлизавета Вікторівна
@@ -50,7 +50,7 @@ public class Main {
         forma = Цивільні справи
         add_address = 65080, Одеська, м. Одеса, вул.Варненська, 3б
         }
-        , CourtCase{
+        , model.CourtCase{
         date  =14.12.2016 14:30
         number = 522/11272/16-ц
         involved = Позивач: Зофірі Наталя Григорівна, позивач: Яськова Валентина Григорівна, позивач: Трунько Тетяна Григорівна, позивач: Чегурко Григорій Артемович, відповідач: Чегурко Віталій Васильович, третя особа: Шоста Одеська державна нотаріальна контора
