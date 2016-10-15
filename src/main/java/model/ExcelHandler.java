@@ -18,6 +18,7 @@ public class ExcelHandler implements FileIOHandler {
     private HSSFSheet myExcelSheet;
     private File file;
 
+    //TODO: it would be better, if constructor accepted File instead of String as file path
     public ExcelHandler(String filePath, String sheetName) throws IOException {
         this.file = new File(filePath);
         myExcelBook = new HSSFWorkbook(new FileInputStream(file));
@@ -25,7 +26,8 @@ public class ExcelHandler implements FileIOHandler {
 
     }
 
-    public List<String> getIDList() throws IOException {
+    public List<String> getIDList() throws IOException { //TODO: avoid this checked exception. There is no way to handle it
+        // it could be thrown if method getIdList(CellType type) would accepted type (and this type could be invalid).
         List<String> caseNumberList = new ArrayList<String>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
@@ -37,11 +39,11 @@ public class ExcelHandler implements FileIOHandler {
                 throw new IOException("Wrong cell type in a table!");
             }
         }
-        myExcelBook.close();
+        myExcelBook.close(); //TODO: seems like after this call I cannot access to this file. I would propose to do open-close operations in single method
         return caseNumberList;
     }
 
-    public List<CourtCase> readCurrentListOfCases() {
+    public List<CourtCase> readCurrentListOfCases() { //TODO: I would use this method instead of getIDList()
         List<CourtCase> caseList = new ArrayList<>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
@@ -65,7 +67,7 @@ public class ExcelHandler implements FileIOHandler {
         return caseList;
     }
 
-    //Private methods...
+    //Private methods... TODO: why first private method is public?
     public void writeAllTheInfo(List<CourtCase> listOfRows) throws IOException {
 
         for (CourtCase courtCase : listOfRows) {

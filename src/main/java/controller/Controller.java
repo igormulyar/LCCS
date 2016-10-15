@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class Controller {
 
-    private List<CourtCase> caseList;
-    private FileIOHandler IOHandler;
+    private List<CourtCase> caseList; //TODO: can be replaced by IOHandler.readCurrentListOfCases();
+    private FileIOHandler IOHandler;//TODO: lower case for fields ioHandler
     private Extractor extractor = new HttpExtractor();
 
     public Controller(String filePath) {
@@ -20,7 +20,7 @@ public class Controller {
             IOHandler = new ExcelHandler(filePath, "Лист1");
             caseList = IOHandler.readCurrentListOfCases();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();// TODO: I think it is not efficient handling. Runtime exception should be thrown (or existed rethrown)
         }
     }
 
@@ -31,7 +31,7 @@ public class Controller {
     }
 
     public void updateCaseList() {
-        List<String> IDList;
+        List<String> IDList;//TODO: lower case idList
         try {
             IDList = IOHandler.getIDList();
             List<CourtCase> resultList = new ArrayList<CourtCase>();
@@ -44,12 +44,19 @@ public class Controller {
             caseList = resultList;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //TODO: same thing: throw runtime exception
         }
+
+        /* I would refactor this method in such way:
+        List<String> allIds = ioHandler.getAllIds();
+        List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
+        ioHandler.save(courtCases);
+        */
     }
 
     public void addCase(String caseNumber) {
         //will be implemented later
+        //"later" almost always is never
     }
 
     public void deleteCase(String caseNumber) {

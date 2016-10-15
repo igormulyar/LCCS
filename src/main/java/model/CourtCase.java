@@ -4,14 +4,15 @@ package model;
  * Created by igor on 21.09.16.
  */
 
+//TODO: this class is only the model. Rest classes should be moved out of model package
 public class CourtCase {
 
-    private String date;
+    private String date; //TODO: why not LocalDate?
     private String number;
     private String involved;
     private String description;
     private String judge;
-    private String forma;
+    private String forma; //TODO: form? template?
     private String add_address;
 
 
@@ -22,10 +23,10 @@ public class CourtCase {
         this.description = description;
         this.judge = judge;
         this.forma = forma;
-        this.add_address = add_address;
+        this.add_address = add_address; //TODO: snake_case is not allowed. camelCase only.
     }
 
-    /*public model.CourtCase (String number){
+    /*public model.CourtCase (String number){ //TODO: remove
         this.number = number;
     }*/
 
@@ -60,6 +61,8 @@ public class CourtCase {
     public String extractCourtIdFromNumber() {
         return number.substring(0, 2);
     }
+
+    //TODO: I would add equals and hashcode
 
     @Override
     public String toString() {

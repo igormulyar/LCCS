@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String unixPath = "/home/igor/Development/exceltable/table1.xls";
+        String unixPath = "/home/igor/Development/exceltable/table1.xls"; //TODO: use Path (or File) instead of String
         String winPath = "C:\\MyTable.xls";
 
         Controller controller = new Controller(unixPath);
@@ -38,7 +38,8 @@ public class Main {
         */
 
         controller.updateCaseList();
-        System.out.println(controller.showCurrentCases());
+        System.out.println(controller.showCurrentCases()); //TODO refactor: System.out.println(controller.updateCaseList());
+
 
         /*OUTPUT AFTER UPDATING THE CASE LIST:
         [model.CourtCase{
