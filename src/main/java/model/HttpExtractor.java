@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 
 public class HttpExtractor implements Extractor {
 
-    public CourtCase getCase(String caseNumber) {
+    public CourtCase extractCourtCases(String caseNumber) {
         Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in model.HttpExtractor.Court) using case number
         List<CourtCase> caseList = null;
         try {

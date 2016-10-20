@@ -2,8 +2,8 @@ package controller;
 
 import model.*;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,14 +11,16 @@ import java.util.List;
  */
 public class Controller {
 
-    private List<CourtCase> caseList; //TODO: can be replaced by IOHandler.readCurrentListOfCases();
-    private FileIOHandler IOHandler;//TODO: lower case for fields ioHandler
+    private List<CourtCase> caseList; //TODO: can be replaced by ioHandler.readCurrentListOfCases();
+    // how? If i write "private List<CourtCase> caseList = ioHandler.readCurrentListOfCases()", there will be
+    // checked exception and i'll should write ugly "{ } - blocks" here. Is it necessary?
+    private FileIOHandler ioHandler;//done //TODO: lower case for fields ioHandler
     private Extractor extractor = new HttpExtractor();
 
-    public Controller(String filePath) {
+    public Controller(File file) {
         try {
-            IOHandler = new ExcelHandler(filePath, "Лист1");
-            caseList = IOHandler.readCurrentListOfCases();
+            ioHandler = new ExcelHandler(file.getPath(), "Лист1");
+            caseList = ioHandler.readCurrentListOfCases();// i initialized ioHandler in constructor because handling exception here is convenient to me.
         } catch (IOException e) {
             e.printStackTrace();// TODO: I think it is not efficient handling. Runtime exception should be thrown (or existed rethrown)
         }
@@ -31,22 +33,15 @@ public class Controller {
     }
 
     public void updateCaseList() {
-        List<String> IDList;//TODO: lower case idList
         try {
-            IDList = IOHandler.getIDList();
-            List<CourtCase> resultList = new ArrayList<CourtCase>();
-
-            for (String caseID : IDList) {
-                resultList.add(extractor.getCase(caseID));
-            }
-
-            IOHandler.writeAllTheInfo(resultList);
-            caseList = resultList;
-
+            List<String> allIds = ioHandler.getAllIds();//done//TODO: lower case idList
+            List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
+            ioHandler.save(courtCases);
+            caseList = courtCases;
         } catch (IOException e) {
             e.printStackTrace(); //TODO: same thing: throw runtime exception
         }
-
+        //done
         /* I would refactor this method in such way:
         List<String> allIds = ioHandler.getAllIds();
         List<CourtCase> courtCases = extractor.extractCourtCases(allIds);

@@ -26,7 +26,7 @@ public class ExcelHandler implements FileIOHandler {
 
     }
 
-    public List<String> getIDList() throws IOException { //TODO: avoid this checked exception. There is no way to handle it
+    public List<String> getAllIds() throws IOException { //TODO: avoid this checked exception. There is no way to handle it
         // it could be thrown if method getIdList(CellType type) would accepted type (and this type could be invalid).
         List<String> caseNumberList = new ArrayList<String>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
@@ -43,7 +43,7 @@ public class ExcelHandler implements FileIOHandler {
         return caseNumberList;
     }
 
-    public List<CourtCase> readCurrentListOfCases() { //TODO: I would use this method instead of getIDList()
+    public List<CourtCase> readCurrentListOfCases() { //TODO: I would use this method instead of getAllIds()
         List<CourtCase> caseList = new ArrayList<>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);
@@ -68,7 +68,7 @@ public class ExcelHandler implements FileIOHandler {
     }
 
     //Private methods... TODO: why first private method is public?
-    public void writeAllTheInfo(List<CourtCase> listOfRows) throws IOException {
+    public void save(List<CourtCase> listOfRows) throws IOException {
 
         for (CourtCase courtCase : listOfRows) {
             writeOneRow(courtCase);

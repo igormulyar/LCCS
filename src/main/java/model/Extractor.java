@@ -7,5 +7,5 @@ package model;
 //TODO: I would not use interfaces here (and in FileIOHanler too)
 public interface Extractor {
 
-    CourtCase getCase(String caseNumber);
+    CourtCase extractCourtCases(String caseNumber);
 }

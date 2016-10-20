@@ -8,10 +8,10 @@ import java.util.List;
  */
 public interface FileIOHandler {
 
-    List<String> getIDList() throws IOException;
+    List<String> getAllIds() throws IOException;
 
     List<CourtCase> readCurrentListOfCases();
 
-    void writeAllTheInfo(List<CourtCase> listOfRows) throws IOException;
+    void save(List<CourtCase> listOfRows) throws IOException;
 
 }

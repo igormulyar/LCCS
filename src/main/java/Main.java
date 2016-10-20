@@ -1,5 +1,6 @@
 import controller.Controller;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -9,8 +10,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        String unixPath = "/home/igor/Development/exceltable/table1.xls"; //TODO: use Path (or File) instead of String
-        String winPath = "C:\\MyTable.xls";
+        File unixPath = new File("/home/igor/Development/exceltable/table1.xls");//done //TODO: use Path (or File) instead of String
+        File winPath = new File("C:\\MyTable.xls");//done
 
         Controller controller = new Controller(unixPath);
         System.out.println(controller.showCurrentCases());
