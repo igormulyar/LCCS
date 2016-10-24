@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 /**
  * Created by TRUST on 02.08.2016.
  */
@@ -7,5 +9,5 @@ package model;
 //TODO: I would not use interfaces here (and in FileIOHanler too)
 public interface Extractor {
 
-    CourtCase extractCourtCases(String caseNumber);
+    List<CourtCase> extractCourtCases(List<String> allIds);
 }

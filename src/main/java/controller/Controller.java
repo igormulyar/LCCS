@@ -22,7 +22,8 @@ public class Controller {
             ioHandler = new ExcelHandler(file.getPath(), "Лист1");
             caseList = ioHandler.readCurrentListOfCases();// i initialized ioHandler in constructor because handling exception here is convenient to me.
         } catch (IOException e) {
-            e.printStackTrace();// TODO: I think it is not efficient handling. Runtime exception should be thrown (or existed rethrown)
+            throw new RuntimeException("XLS-file handling failed");
+            //done // TODO: I think it is not efficient handling. Runtime exception should be thrown (or existed rethrown)
         }
     }
 
@@ -39,7 +40,7 @@ public class Controller {
             ioHandler.save(courtCases);
             caseList = courtCases;
         } catch (IOException e) {
-            e.printStackTrace(); //TODO: same thing: throw runtime exception
+            throw new RuntimeException("XLS-file handling failed"); //done //TODO: same thing: throw runtime exception
         }
         //done
         /* I would refactor this method in such way:
@@ -48,15 +49,5 @@ public class Controller {
         ioHandler.save(courtCases);
         */
     }
-
-    public void addCase(String caseNumber) {
-        //will be implemented later
-        //"later" almost always is never
-    }
-
-    public void deleteCase(String caseNumber) {
-        // will be implemented later
-    }
-
 
 }

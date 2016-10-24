@@ -21,22 +21,27 @@ import org.xml.sax.SAXException;
 
 public class HttpExtractor implements Extractor {
 
-    public CourtCase extractCourtCases(String caseNumber) {
-        Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in model.HttpExtractor.Court) using case number
-        List<CourtCase> caseList = null;
-        try {
-            caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<CourtCase> extractCourtCases(List<String> allIds) {
 
-        for (CourtCase c : caseList) {
-            if (c.getNumber().equals(caseNumber)) {
-                return c;
+        List<CourtCase> resultCaseList = new ArrayList<>();
+        for (String caseNumber : allIds){
+            Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in model.HttpExtractor.Court) using case number
+            List<CourtCase> caseList = null;
+            try {
+                caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (CourtCase currentCase : caseList) {
+                if (currentCase.getNumber().equals(caseNumber)) {
+                    resultCaseList.add(currentCase);
+                }
             }
         }
 
-        return null;// TODO avoid this
+        return resultCaseList;
+        // TODO avoid this (null values)
     }
 
 
