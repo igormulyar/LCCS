@@ -13,6 +13,8 @@ public class Main {
         File unixPath = new File("/home/igor/Development/exceltable/table1.xls");//done //TODO: use Path (or File) instead of String
         File winPath = new File("C:\\MyTable.xls");//done
 
+
+
         Controller controller = new Controller(unixPath);
         System.out.println(controller.showCurrentCases());
 
