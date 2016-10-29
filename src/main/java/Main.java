@@ -1,4 +1,5 @@
 import controller.Controller;
+import model.SQLiteHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class Main {
         File unixPath = new File("/home/igor/Development/exceltable/table1.xls");//done //TODO: use Path (or File) instead of String
         File winPath = new File("C:\\MyTable.xls");//done
 
+        new SQLiteHandler();
 
 
         Controller controller = new Controller(unixPath);
