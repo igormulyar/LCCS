@@ -32,6 +32,7 @@ public class SQLiteHandler implements FileIOHandler {
             }
         }));
 
+        //Temporary solving of DB initialization. Need to decide where to move this
         try {
             String sql = "CREATE TABLE IF NOT EXISTS \"numbers\" (\n" +
                     "    \"num_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
