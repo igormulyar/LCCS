@@ -32,7 +32,7 @@ INSERT INTO hearings (date, num_id, involved, description, judge, form, address)
 
 
 --SEARCH BY CASE NUMBER---
-SELECT FROM hearings
+SELECT * FROM hearings
 WHERE  num_id=(
 SELECT num_id FROM numbers 
 WHERE number='522/5075/16-к'
