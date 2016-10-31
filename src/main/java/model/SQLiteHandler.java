@@ -1,10 +1,8 @@
 package model;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,25 +54,61 @@ public class SQLiteHandler implements FileIOHandler {
             System.out.println("DB init finished.");
             preparedStatement.close();
         }catch (SQLException e){
-            e.printStackTrace();
-            throw new  RuntimeException("Crashed when tried to run SQL-query for initializing the tables in DB.\n");
+            throw new  RuntimeException("Crashed when tried to run SQL-query for initializing the tables in DB.\n"+e);
         }
-
-
     }
 
     @Override
     public List<String> getAllIds() throws IOException {
-        return null;
+        List<String> ids = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT number FROM numbers");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                ids.add(resultSet.getString("number"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ids;
     }
 
     @Override
     public List<CourtCase> readCurrentListOfCases() {
-        return null;
+        List<CourtCase> caseList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT h.date, n.number, h.involved, h.description, h.judge, h.form, h.address\n" +
+                    "FROM hearings h\n" +
+                    "JOIN numbers n ON h.num_id=n.num_id;");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                CourtCase courtCase = new CourtCase(
+                        resultSet.getString("date"),
+                        resultSet.getString("number"),
+                        resultSet.getString("involved"),
+                        resultSet.getString("description"),
+                        resultSet.getString("judge"),
+                        resultSet.getString("form"),
+                        resultSet.getString("address")
+                );
+                caseList.add(courtCase);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return caseList;
     }
 
     @Override
     public void save(List<CourtCase> listOfRows) throws IOException {
+        try {
+            PreparedStatement statement = connection.prepareStatement(""
+                    );
+            ResultSet resultSet = statement.executeQuery();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

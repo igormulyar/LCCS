@@ -47,7 +47,11 @@ SELECT * FROM numbers;
 --READ CURRENT LIST OF CASES--
 SELECT h.date, n.number, h.involved, h.description, h.judge, h.form, h.address
 FROM hearings h
-JOIN numbers n ON h.num_id=n.num_id
+JOIN numbers n ON h.num_id=n.num_id;
 ----------------------
 
--- 
+--SAVE METHOD--------_
+UPDATE hearings
+SET date = ?, num_id =(SELECT num_id FROM numbers WHERE number = ?), involved = ?, description = ?, judge = ?, form = ?, address = ?
+WHERE num_id = (SELECT num_id FROM numbers WHERE number = ?)
+------------
