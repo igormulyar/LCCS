@@ -1,9 +1,8 @@
 -- Описать NUMBERS
 CREATE TABLE IF NOT EXISTS "numbers" (
     "num_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    "number" TEXT NOT NULL
-);
-CREATE UNIQUE INDEX unq_number ON numbers(number); -- херачим, чтобы в таблице не было два одинаковых номера дела.
+    "number" TEXT UNIQUE NOT NULL );
+----
 
 
 -- вставка в NUMBERS для примера:

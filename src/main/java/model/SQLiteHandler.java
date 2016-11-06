@@ -32,13 +32,18 @@ public class SQLiteHandler implements FileIOHandler {
 
         //Temporary solving of DB initialization. Need to decide where to move this
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS \"numbers\" (\n" +
-                    "    \"num_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                    "    \"number\" TEXT NOT NULL\n" +
-                    ");\n" +
-                    "CREATE UNIQUE INDEX unq_number ON numbers(number);";
+            String sql = "PRAGMA FOREIGN_KEYS=ON;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+
+            sql = "CREATE TABLE IF NOT EXISTS \"numbers\" (\n" +
+                    "    \"num_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    "    \"number\" TEXT UNIQUE NOT NULL);";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+
             sql = "CREATE TABLE IF NOT EXISTS \"hearings\" (\n" +
                     "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                     "    \"date\" TEXT,\n" +
@@ -47,8 +52,8 @@ public class SQLiteHandler implements FileIOHandler {
                     "    \"description\" TEXT,\n" +
                     "    \"judge\" TEXT,\n" +
                     "    \"form\" TEXT,\n" +
-                    "    \"address\" TEXT\n" +
-                    ");";
+                    "    \"address\" TEXT,\n" +
+                    "    FOREIGN KEY (num_id) REFERENCES numbers (num_id) ON DELETE CASCADE);";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
             System.out.println("DB init finished.");
@@ -67,6 +72,7 @@ public class SQLiteHandler implements FileIOHandler {
             while (resultSet.next()) {
                 ids.add(resultSet.getString("number"));
             }
+            resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -93,8 +99,8 @@ public class SQLiteHandler implements FileIOHandler {
                         resultSet.getString("address")
                 );
                 caseList.add(courtCase);
-                resultSet.close();
             }
+            resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -103,14 +109,33 @@ public class SQLiteHandler implements FileIOHandler {
 
     @Override
     public void save(List<CourtCase> listOfRows) throws IOException {
-        String sql = buildSaveTransaction(listOfRows);
+
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeQuery();
+            PreparedStatement statement = connection.prepareStatement("BEGIN TRANSACTION;");
+            statement.executeUpdate();
+            statement = connection.prepareStatement("DELETE FROM hearings;");
+            statement.executeUpdate();
+            for (CourtCase courtCase : listOfRows) {
+                int numId = getNumId(courtCase.getNumber());
+                String sql = "INSERT INTO hearings (date, num_id, involved, description, judge, form, address) VALUES " +
+                        "('" + courtCase.getDate() + "', '" +
+                        numId + "', '" +
+                        courtCase.getInvolved() + "', '" +
+                        courtCase.getDescription() + "', '" +
+                        courtCase.getJudge() + "', '" +
+                        courtCase.getForma() + "', '" +
+                        courtCase.getAdd_address() + "');\n";
+                statement = connection.prepareStatement(sql);
+                statement.executeUpdate();
+            }
+            statement = connection.prepareStatement("COMMIT;");
+            statement.executeUpdate();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public void addNumber(String number) {
@@ -118,7 +143,8 @@ public class SQLiteHandler implements FileIOHandler {
             String sql = "INSERT OR IGNORE INTO numbers (number) VALUES (?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, number);
-            statement.executeQuery();
+            statement.executeUpdate();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -130,42 +156,27 @@ public class SQLiteHandler implements FileIOHandler {
             String sql = "DELETE FROM numbers WHERE number = ?;";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, number);
-            statement.executeQuery();
+            statement.executeUpdate();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-
-    // is it an extremely ugly solution?
-    private String buildSaveTransaction(List<CourtCase> listOfRows) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("BEGIN;\nDELETE FROM hearings;\n");
-        for (CourtCase courtCase : listOfRows) {
-            int numId;
-            try {
-                String sql = "SELECT num_id FROM numbers WHERE number=?";
-                PreparedStatement stmnt = connection.prepareStatement(sql);
-                stmnt.setString(1, courtCase.getNumber());
-                ResultSet resultSet = stmnt.executeQuery();
-                resultSet.next();
-                numId = resultSet.getInt("num_id");
-                resultSet.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            sb.append("INSERT INTO hearings (date, num_id, involved, description, judge, form, address) VALUES " +
-                    "(" + courtCase.getDate() + ", " +
-                    numId + ", " +
-                    courtCase.getInvolved() + ", " +
-                    courtCase.getDescription() + ", " +
-                    courtCase.getJudge() + ", " +
-                    courtCase.getForma() + ", " +
-                    courtCase.getAdd_address() + ");\n");
+    private int getNumId(String number) {
+        int numId;
+        try {
+            String sql = "SELECT num_id FROM numbers WHERE number=?";
+            PreparedStatement stmnt = connection.prepareStatement(sql);
+            stmnt.setString(1, number);
+            ResultSet resultSet = stmnt.executeQuery();
+            resultSet.next();
+            numId = resultSet.getInt("num_id");
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        sb.append("COMMIT;");
-        System.out.println(sb.toString());
-        return sb.toString();
+        return numId;
     }
 }

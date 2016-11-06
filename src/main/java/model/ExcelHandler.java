@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by TRUST on 29.07.2016.
  */
-public class ExcelHandler implements FileIOHandler {
+public class ExcelHandler {
 
     private HSSFWorkbook myExcelBook;
     private HSSFSheet myExcelSheet;
