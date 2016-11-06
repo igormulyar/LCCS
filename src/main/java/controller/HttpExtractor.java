@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -25,24 +26,20 @@ public class HttpExtractor {
     public List<CourtCase> extractCourtCases(List<String> allIds) {
 
         List<CourtCase> resultCaseList = new ArrayList<>();
-        for (String caseNumber : allIds){
+        for (String caseNumber : allIds) {
             Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
             List<CourtCase> caseList = null;
-            try {
-                caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (court != null) {
+                    caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
             }
-
-            for (CourtCase currentCase : caseList) {
-                if (currentCase.getNumber().equals(caseNumber)) {
-                    resultCaseList.add(currentCase);
-                }
+            if (caseList != null) {
+                resultCaseList.addAll(caseList.stream()
+                        .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
+                        .collect(Collectors.toList()));
             }
         }
-
         return resultCaseList;
-        // TODO avoid this (null values)
+        // done? please, check// TODO avoid this (null values)
     }
 
 
@@ -51,7 +48,8 @@ public class HttpExtractor {
     url, referer-header and courtId are parameters used in order to make a correct request
     returns a list of court cases fetched from server
     */
-    private List<CourtCase> getCourtCases(String url, String host, String referer, String courtId) throws IOException { //TODO: catch this exception
+    private List<CourtCase> getCourtCases(String url, String host, String referer, String courtId) { //I've just removed throwing that IOException from method signature//TODO: catch this exception
+        List<CourtCase> caseList = new ArrayList<CourtCase>();
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             jsonResponse = Unirest.post(url)// TODO spring RestTemplate could be used insted
@@ -68,16 +66,12 @@ public class HttpExtractor {
             e.printStackTrace();
         }
 
-        JSONArray jsonArray = jsonResponse.getBody().getArray();//TODO: IDEA points that here null pointer exception possible
-
-        List<CourtCase> caseList = new ArrayList<CourtCase>();
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            caseList.add(parseCourtCaseFromJson(new JsonNode(jsonArray.get(i).toString()).getObject()));
+        if (jsonResponse != null) {
+            JSONArray jsonArray = jsonResponse.getBody().getArray(); //done? //TODO: IDEA points that here null pointer exception possible
+            for (int i = 0; i < jsonArray.length(); i++) {
+                caseList.add(parseCourtCaseFromJson(new JsonNode(jsonArray.get(i).toString()).getObject()));
+            }
         }
-
-        //System.out.println(caseList.get(7).toString()); //WTF???
-
         return caseList;
     }
 
