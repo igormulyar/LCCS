@@ -26,7 +26,7 @@ public class ExcelHandler implements FileIOHandler {
 
     }
 
-    public List<String> getAllIds() throws IOException { //TODO: avoid this checked exception. There is no way to handle it
+    public List<String> getAllNumbers() throws IOException { //TODO: avoid this checked exception. There is no way to handle it
         // it could be thrown if method getIdList(CellType type) would accepted type (and this type could be invalid).
         List<String> caseNumberList = new ArrayList<String>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
@@ -43,7 +43,7 @@ public class ExcelHandler implements FileIOHandler {
         return caseNumberList;
     }
 
-    public List<CourtCase> readCurrentListOfCases() { //TODO: I would use this method instead of getAllIds()
+    public List<CourtCase> getCurrentListOfCases() { //TODO: I would use this method instead of getAllNumbers()
         List<CourtCase> caseList = new ArrayList<>();
         for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
             HSSFRow row = myExcelSheet.getRow(i);

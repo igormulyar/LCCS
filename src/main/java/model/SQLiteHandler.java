@@ -14,10 +14,10 @@ public class SQLiteHandler implements FileIOHandler {
 
     public SQLiteHandler() {
         String url = "jdbc:sqlite:caseStorage.db";
-        try{
+        try {
             connection = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Initializing the connection to SQLite was failed.");
         }
@@ -53,18 +53,18 @@ public class SQLiteHandler implements FileIOHandler {
             preparedStatement.executeUpdate();
             System.out.println("DB init finished.");
             preparedStatement.close();
-        }catch (SQLException e){
-            throw new  RuntimeException("Crashed when tried to run SQL-query for initializing the tables in DB.\n"+e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Crashed when tried to run SQL-query for initializing the tables in DB.\n" + e);
         }
     }
 
     @Override
-    public List<String> getAllIds() throws IOException {
+    public List<String> getAllNumbers() {
         List<String> ids = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT number FROM numbers");
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 ids.add(resultSet.getString("number"));
             }
         } catch (SQLException e) {
@@ -74,15 +74,15 @@ public class SQLiteHandler implements FileIOHandler {
     }
 
     @Override
-    public List<CourtCase> readCurrentListOfCases() {
+    public List<CourtCase> getCurrentListOfCases() {
         List<CourtCase> caseList = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT h.date, n.number, h.involved, h.description, h.judge, h.form, h.address\n" +
-                    "FROM hearings h\n" +
-                    "JOIN numbers n ON h.num_id=n.num_id;");
+                            "FROM hearings h\n" +
+                            "JOIN numbers n ON h.num_id=n.num_id;");
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 CourtCase courtCase = new CourtCase(
                         resultSet.getString("date"),
                         resultSet.getString("number"),
@@ -93,6 +93,7 @@ public class SQLiteHandler implements FileIOHandler {
                         resultSet.getString("address")
                 );
                 caseList.add(courtCase);
+                resultSet.close();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -102,13 +103,69 @@ public class SQLiteHandler implements FileIOHandler {
 
     @Override
     public void save(List<CourtCase> listOfRows) throws IOException {
+        String sql = buildSaveTransaction(listOfRows);
         try {
-            PreparedStatement statement = connection.prepareStatement(""
-                    );
-            ResultSet resultSet = statement.executeQuery();
-
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void addNumber(String number) {
+        try {
+            String sql = "INSERT OR IGNORE INTO numbers (number) VALUES (?);";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, number);
+            statement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteNumber(String number) {
+        try {
+            String sql = "DELETE FROM numbers WHERE number = ?;";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, number);
+            statement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    // is it an extremely ugly solution?
+    private String buildSaveTransaction(List<CourtCase> listOfRows) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("BEGIN;\nDELETE FROM hearings;\n");
+        for (CourtCase courtCase : listOfRows) {
+            int numId;
+            try {
+                String sql = "SELECT num_id FROM numbers WHERE number=?";
+                PreparedStatement stmnt = connection.prepareStatement(sql);
+                stmnt.setString(1, courtCase.getNumber());
+                ResultSet resultSet = stmnt.executeQuery();
+                resultSet.next();
+                numId = resultSet.getInt("num_id");
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            sb.append("INSERT INTO hearings (date, num_id, involved, description, judge, form, address) VALUES " +
+                    "(" + courtCase.getDate() + ", " +
+                    numId + ", " +
+                    courtCase.getInvolved() + ", " +
+                    courtCase.getDescription() + ", " +
+                    courtCase.getJudge() + ", " +
+                    courtCase.getForma() + ", " +
+                    courtCase.getAdd_address() + ");\n");
+        }
+        sb.append("COMMIT;");
+        System.out.println(sb.toString());
+        return sb.toString();
     }
 }

@@ -34,7 +34,7 @@ INSERT INTO hearings (date, num_id, involved, description, judge, form, address)
 --SEARCH BY CASE NUMBER---
 SELECT * FROM hearings
 WHERE  num_id=(
-SELECT num_id FROM numbers 
+SELECT num_id FROM numbers
 WHERE number='522/5075/16-к'
 );
 --------------------------
@@ -52,6 +52,13 @@ JOIN numbers n ON h.num_id=n.num_id;
 
 --SAVE METHOD--------_
 UPDATE hearings
-SET date = ?, num_id =(SELECT num_id FROM numbers WHERE number = ?), involved = ?, description = ?, judge = ?, form = ?, address = ?
-WHERE num_id = (SELECT num_id FROM numbers WHERE number = ?)
+SET date = ?, involved = ?, description = ?, judge = ?, form = ?, address = ?
+WHERE num_id = (SELECT num_id FROM numbers WHERE number = ?);
+--V2
+BEGIN;
+DELETE FROM hearings;
+
+--blablabla...--
+COMMIT;
+
 ------------
