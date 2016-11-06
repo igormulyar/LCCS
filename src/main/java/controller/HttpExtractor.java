@@ -1,4 +1,4 @@
-package model;
+package controller;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +12,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import model.CourtCase;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -19,13 +20,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class HttpExtractor implements Extractor {
+public class HttpExtractor {
 
     public List<CourtCase> extractCourtCases(List<String> allIds) {
 
         List<CourtCase> resultCaseList = new ArrayList<>();
         for (String caseNumber : allIds){
-            Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in model.HttpExtractor.Court) using case number
+            Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
             List<CourtCase> caseList = null;
             try {
                 caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
@@ -95,7 +96,7 @@ public class HttpExtractor implements Extractor {
     }
 
     // find out the information about court which is needed for making correct http-request.
-    // returns model.HttpExtractor.Court that consist url, referer, court_id and others
+    // returns controller.HttpExtractor.Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
         //TODO: I do not understand why you have picked an XML for this. JSON is more convenient, and Jackson can do all this job automatically.
         //or even simpler way: use java serialization

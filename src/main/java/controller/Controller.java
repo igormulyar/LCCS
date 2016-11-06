@@ -2,7 +2,6 @@ package controller;
 
 import model.*;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
 public class Controller {
     private FileIOHandler ioHandler = new SQLiteHandler();
     private List<CourtCase> caseList = ioHandler.getCurrentListOfCases();
-    private Extractor extractor = new HttpExtractor();
+    private HttpExtractor extractor = new HttpExtractor();
 
     public List<String> showAllNumbers (){
         return ioHandler.getAllNumbers();
@@ -30,14 +29,10 @@ public class Controller {
     }
 
     public String updateCaseList() {
-        try {
             List<String> allIds = ioHandler.getAllNumbers();
             List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
             ioHandler.save(courtCases);
             caseList = courtCases;
-        } catch (IOException e) {
-            throw new RuntimeException("XLS-file handling failed");
-        }
         return caseList.toString();
     }
 

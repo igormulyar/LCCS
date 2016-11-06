@@ -1,7 +1,5 @@
 import controller.Controller;
-import model.SQLiteHandler;
 
-import java.io.File;
 import java.io.IOException;
 
 /**

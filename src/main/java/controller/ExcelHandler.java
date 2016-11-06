@@ -1,5 +1,6 @@
-package model;
+package controller;
 
+import model.CourtCase;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created by TRUST on 29.07.2016.
  */
+@Deprecated
 public class ExcelHandler {
 
     private HSSFWorkbook myExcelBook;
@@ -95,7 +97,7 @@ public class ExcelHandler {
                 row.getCell(2).setCellValue(courtCase.getInvolved());
                 row.getCell(3).setCellValue(courtCase.getDescription());
                 row.getCell(4).setCellValue(courtCase.getJudge());
-                row.getCell(5).setCellValue(courtCase.getForma());
+                row.getCell(5).setCellValue(courtCase.getForm());
                 row.getCell(6).setCellValue(courtCase.getAdd_address());
             }
         }

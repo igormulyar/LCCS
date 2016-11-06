@@ -1,6 +1,7 @@
-package model;
+package controller;
 
-import java.io.IOException;
+import model.CourtCase;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +109,7 @@ public class SQLiteHandler implements FileIOHandler {
     }
 
     @Override
-    public void save(List<CourtCase> listOfRows) throws IOException {
+    public void save(List<CourtCase> listOfRows) {
 
         try {
             PreparedStatement statement = connection.prepareStatement("BEGIN TRANSACTION;");
@@ -123,7 +124,7 @@ public class SQLiteHandler implements FileIOHandler {
                         courtCase.getInvolved() + "', '" +
                         courtCase.getDescription() + "', '" +
                         courtCase.getJudge() + "', '" +
-                        courtCase.getForma() + "', '" +
+                        courtCase.getForm() + "', '" +
                         courtCase.getAdd_address() + "');\n";
                 statement = connection.prepareStatement(sql);
                 statement.executeUpdate();

@@ -1,6 +1,7 @@
-package model;
+package controller;
 
-import java.io.IOException;
+import model.CourtCase;
+
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public interface FileIOHandler {
 
     List<CourtCase> getCurrentListOfCases();
 
-    void save(List<CourtCase> listOfRows) throws IOException;
+    void save(List<CourtCase> listOfRows);
 
     void addNumber(String number);
 
