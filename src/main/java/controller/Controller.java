@@ -28,12 +28,12 @@ public class Controller {
         return caseList;
     }
 
-    public String updateCaseList() {
+    public List<CourtCase> updateCaseList() {
             List<String> allIds = ioHandler.getAllNumbers();
             List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
             ioHandler.save(courtCases);
             caseList = courtCases;
-        return caseList.toString();
+        return caseList;
     }
 
 }

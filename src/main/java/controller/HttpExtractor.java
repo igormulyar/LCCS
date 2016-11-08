@@ -13,6 +13,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import model.Court;
 import model.CourtCase;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +42,6 @@ public class HttpExtractor {
         return resultCaseList;
         // done? please, check// TODO avoid this (null values)
     }
-
 
     /*
     This method makes a http POST-Request to the URL with headers and request body
@@ -124,48 +124,5 @@ public class HttpExtractor {
             }
         }
         return null;// TODO: really bad thing. If this is valid case use Optional<Court> as return type. If this is exceptional situation - throw an exception.
-    }
-
-    private class Court {// TODO: extract to separate file (in model package)
-
-        private String name;
-        private String idInNumber;
-        private String courtId;
-        private String url;
-        private String host;
-        private String referer;
-
-        public Court(String name, String idInNumber, String courtId, String url, String host, String referer) {
-            this.name = name;
-            this.idInNumber = idInNumber;
-            this.courtId = courtId;
-            this.url = url;
-            this.host = host;
-            this.referer = referer;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getIdInNumber() {
-            return idInNumber;
-        }
-
-        public String getCourtId() {
-            return courtId;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public String getReferer() {
-            return referer;
-        }
     }
 }

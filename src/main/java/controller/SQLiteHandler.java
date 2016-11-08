@@ -110,30 +110,31 @@ public class SQLiteHandler implements FileIOHandler {
 
     @Override
     public void save(List<CourtCase> listOfRows) {
-
-        try {
-            PreparedStatement statement = connection.prepareStatement("BEGIN TRANSACTION;");
-            statement.executeUpdate();
-            statement = connection.prepareStatement("DELETE FROM hearings;");
-            statement.executeUpdate();
-            for (CourtCase courtCase : listOfRows) {
-                int numId = getNumId(courtCase.getNumber());
-                String sql = "INSERT INTO hearings (date, num_id, involved, description, judge, form, address) VALUES " +
-                        "('" + courtCase.getDate() + "', '" +
-                        numId + "', '" +
-                        courtCase.getInvolved() + "', '" +
-                        courtCase.getDescription() + "', '" +
-                        courtCase.getJudge() + "', '" +
-                        courtCase.getForm() + "', '" +
-                        courtCase.getAdd_address() + "');\n";
-                statement = connection.prepareStatement(sql);
+        if (listOfRows.size()>0) {
+            try {
+                PreparedStatement statement = connection.prepareStatement("BEGIN TRANSACTION;");
                 statement.executeUpdate();
+                statement = connection.prepareStatement("DELETE FROM hearings;");
+                statement.executeUpdate();
+                for (CourtCase courtCase : listOfRows) {
+                    int numId = getNumId(courtCase.getNumber());
+                    String sql = "INSERT INTO hearings (date, num_id, involved, description, judge, form, address) VALUES " +
+                            "('" + courtCase.getDate() + "', '" +
+                            numId + "', '" +
+                            courtCase.getInvolved() + "', '" +
+                            courtCase.getDescription() + "', '" +
+                            courtCase.getJudge() + "', '" +
+                            courtCase.getForm() + "', '" +
+                            courtCase.getAdd_address() + "');\n";
+                    statement = connection.prepareStatement(sql);
+                    statement.executeUpdate();
+                }
+                statement = connection.prepareStatement("COMMIT;");
+                statement.executeUpdate();
+                statement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            statement = connection.prepareStatement("COMMIT;");
-            statement.executeUpdate();
-            statement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

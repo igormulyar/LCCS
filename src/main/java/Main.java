@@ -14,7 +14,6 @@ public class Main {
 */
 
 
-
         Controller controller = new Controller();
         System.out.println("Current cases: " + controller.showCurrentCases());
         System.out.println("Number list: " + controller.showAllNumbers());
@@ -24,12 +23,12 @@ public class Main {
         controller.addNumber("521/21264/14-ц");
 
         System.out.println("updating info...");
-        System.out.println(controller.updateCaseList());
+        System.out.println(controller.updateCaseList().toString());
 
         System.out.println("deleting one number...");
         controller.deleteNumber("520/13447/16-п");
 
         System.out.println("updating info after deleting one number...");
-        System.out.println(controller.updateCaseList());
+        System.out.println(controller.updateCaseList().toString());
     }
 }
