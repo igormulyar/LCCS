@@ -78,11 +78,8 @@ public class HttpExtractor {
         return cases;
     }
 
-
-    // find out the information about court which is needed for making correct http-request.
-    // returns controller.HttpExtractor.Court that consist url, referer, court_id and others
     private Court getCourtForRequest(String caseNumber) {
-        //TODO: I do not understand why you have picked an XML for this. JSON is more convenient, and Jackson can do all this job automatically.
+        //done //TODO: I do not understand why you have picked an XML for this. JSON is more convenient, and Jackson can do all this job automatically.
         //or even simpler way: use java serialization
         ObjectMapper mapper = new ObjectMapper();
         List<Court> courts = null;
