@@ -90,15 +90,14 @@ public class SQLiteHandler implements FileIOHandler {
                             "JOIN numbers n ON h.num_id=n.num_id;");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                CourtCase courtCase = new CourtCase(
-                        resultSet.getString("date"),
-                        resultSet.getString("number"),
-                        resultSet.getString("involved"),
-                        resultSet.getString("description"),
-                        resultSet.getString("judge"),
-                        resultSet.getString("form"),
-                        resultSet.getString("address")
-                );
+                CourtCase courtCase = new CourtCase();
+                        courtCase.setDate(resultSet.getString("date"));
+                        courtCase.setNumber(resultSet.getString("number"));
+                        courtCase.setInvolved(resultSet.getString("involved"));
+                        courtCase.setDescription(resultSet.getString("description"));
+                        courtCase.setJudge(resultSet.getString("judge"));
+                        courtCase.setForm(resultSet.getString("form"));
+                        courtCase.setAddress(resultSet.getString("address"));
                 caseList.add(courtCase);
             }
             resultSet.close();
@@ -125,7 +124,7 @@ public class SQLiteHandler implements FileIOHandler {
                             courtCase.getDescription() + "', '" +
                             courtCase.getJudge() + "', '" +
                             courtCase.getForm() + "', '" +
-                            courtCase.getAdd_address() + "');\n";
+                            courtCase.getAddress() + "');\n";
                     statement = connection.prepareStatement(sql);
                     statement.executeUpdate();
                 }

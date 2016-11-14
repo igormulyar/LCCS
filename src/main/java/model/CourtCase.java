@@ -1,5 +1,7 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by igor on 21.09.16.
  */
@@ -14,19 +16,11 @@ public class CourtCase {
     private String involved;
     private String description;
     private String judge;
+    @JsonProperty("forma")
     private String form; // done //TODO: form? template?
-    private String add_address;
+    @JsonProperty("add_address")
+    private String address;
 
-
-    public CourtCase(String date, String number, String involved, String description, String judge, String form, String add_address) {
-        this.date = date;
-        this.number = number;
-        this.involved = involved;
-        this.description = description;
-        this.judge = judge;
-        this.form = form;
-        this.add_address = add_address; //TODO: snake_case is not allowed. camelCase only.
-    }
 
     public String getDate() {
         return date;
@@ -52,12 +46,36 @@ public class CourtCase {
         return description;
     }
 
-    public String getAdd_address() {
-        return add_address;
+    public String getAddress() {
+        return address;
     }
 
-    public String extractCourtIdFromNumber() {
-        return number.substring(0, 2);
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setInvolved(String involved) {
+        this.involved = involved;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setJudge(String judge) {
+        this.judge = judge;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     //TODO: I would add equals and hashcode
@@ -74,7 +92,7 @@ public class CourtCase {
         if (!description.equals(courtCase.description)) return false;
         if (!judge.equals(courtCase.judge)) return false;
         if (!form.equals(courtCase.form)) return false;
-        return add_address.equals(courtCase.add_address);
+        return address.equals(courtCase.address);
     }
 
     @Override
@@ -85,7 +103,7 @@ public class CourtCase {
         result = 31 * result + description.hashCode();
         result = 31 * result + judge.hashCode();
         result = 31 * result + form.hashCode();
-        result = 31 * result + add_address.hashCode();
+        result = 31 * result + address.hashCode();
         return result;
     }
 
@@ -98,7 +116,7 @@ public class CourtCase {
                 "description = " + description + "\n" +
                 "judge = " + judge + "\n" +
                 "form = " + form + "\n" +
-                "add_address = " + add_address + "\n" +
+                "address = " + address + "\n" +
                 '}' + "\n";
     }
 }
