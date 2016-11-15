@@ -30,5 +30,14 @@
     "url": "http://sv.od.court.gov.ua/new.php",
     "host": "sv.od.court.gov.ua",
     "referer": "http://sv.od.court.gov.ua/sud1527/csz/"
+  },
+  {
+    "name": "Господарський суд Одеської області",
+    "idInNumber": "916",
+    "courtId": "5017",
+    "url": "http://od.arbitr.gov.ua/new.php",
+    "host": "od.arbitr.gov.ua",
+    "referer": "http://od.arbitr.gov.ua/sud5017/csz/csz/"
   }
+
 ]
