@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 import model.Court;
@@ -27,14 +28,10 @@ public class HttpExtractor {
         for (String caseNumber : allIds) {
             Court court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
             List<CourtCase> caseList = null;
-            if (court != null) {
-                caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
-            }
-            if (caseList != null) {
-                resultCaseList.addAll(caseList.stream()
-                        .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
-                        .collect(Collectors.toList()));
-            }
+            caseList = getCourtCases(court.getUrl(), court.getHost(), court.getReferer(), court.getCourtId());
+            resultCaseList.addAll(caseList.stream()
+                    .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
+                    .collect(Collectors.toList()));
         }
         return resultCaseList;
         // done? please, check// TODO avoid this (null values)
@@ -76,7 +73,7 @@ public class HttpExtractor {
         //done //TODO: I do not understand why you have picked an XML for this. JSON is more convenient, and Jackson can do all this job automatically.
         //or even simpler way: use java serialization
         ObjectMapper mapper = new ObjectMapper();
-        List<Court> courts = null;
+        List<Court> courts;
         try {
             courts = Arrays.asList(mapper.readValue(new File("src/courts.json"), Court[].class));
         } catch (IOException e) {
@@ -86,7 +83,6 @@ public class HttpExtractor {
         Optional<Court> crt = courts.stream()
                 .filter(c -> c.getIdInNumber().equals(caseNumber.substring(0, 3)))
                 .findAny();
-
         return crt.get();  //done. if value == null, get() will throw new NoSuchElementException("No value present")  // TODO: really bad thing. If this is valid case use Optional<Court> as return type. If this is exceptional situation - throw an exception.
     }
 }

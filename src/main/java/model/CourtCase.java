@@ -79,7 +79,7 @@ public class CourtCase {
     }
 
     //TODO: I would add equals and hashcode
-    //done
+    //done/automatically generated
 
     @Override
     public boolean equals(Object o) {

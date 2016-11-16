@@ -12,6 +12,10 @@ import java.util.List;
 public class SQLiteHandler implements FileIOHandler {
 
     private Connection connection;
+    /*should I declare a field "PreparedStatement statement" here
+    in order to add it to shutdown hook and to use (reuse) it in methods as a field???
+    Would it be more reasonable???
+    */
 
     public SQLiteHandler() {
         String url = "jdbc:sqlite:caseStorage.db";
@@ -31,7 +35,9 @@ public class SQLiteHandler implements FileIOHandler {
             }
         }));
 
-        //Temporary solving of DB initialization. Need to decide where to move this
+        /*Temporary solving of DB initialization. Need to decide where to move this
+        Need help! :)
+         */
         try {
             String sql = "PRAGMA FOREIGN_KEYS=ON;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -91,13 +97,13 @@ public class SQLiteHandler implements FileIOHandler {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 CourtCase courtCase = new CourtCase();
-                        courtCase.setDate(resultSet.getString("date"));
-                        courtCase.setNumber(resultSet.getString("number"));
-                        courtCase.setInvolved(resultSet.getString("involved"));
-                        courtCase.setDescription(resultSet.getString("description"));
-                        courtCase.setJudge(resultSet.getString("judge"));
-                        courtCase.setForm(resultSet.getString("form"));
-                        courtCase.setAddress(resultSet.getString("address"));
+                courtCase.setDate(resultSet.getString("date"));
+                courtCase.setNumber(resultSet.getString("number"));
+                courtCase.setInvolved(resultSet.getString("involved"));
+                courtCase.setDescription(resultSet.getString("description"));
+                courtCase.setJudge(resultSet.getString("judge"));
+                courtCase.setForm(resultSet.getString("form"));
+                courtCase.setAddress(resultSet.getString("address"));
                 caseList.add(courtCase);
             }
             resultSet.close();
@@ -109,7 +115,7 @@ public class SQLiteHandler implements FileIOHandler {
 
     @Override
     public void save(List<CourtCase> listOfRows) {
-        if (listOfRows.size()>0) {
+        if (listOfRows.size() > 0) {
             try {
                 PreparedStatement statement = connection.prepareStatement("BEGIN TRANSACTION;");
                 statement.executeUpdate();
