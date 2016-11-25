@@ -24,7 +24,7 @@ public class SQLiteHandler2 implements FileIOHandler {
         dataSource.setUrl("jdbc:sqlite:caseStorage.db");
         jdbcTemplate = new JdbcTemplate(dataSource);
         System.out.println("Connection established.");
-        initDB();
+        initDB(); // Temporary solving of DB initialization. Need to decide where to move this. Would it be nice to use Flyway or any similar stuff?
     }
 
     @Override
@@ -48,6 +48,7 @@ public class SQLiteHandler2 implements FileIOHandler {
             return courtCase;
         });
     }
+
     @Transactional // hope this stuff will make operations within this method atomic
     @Override
     public void save(List<CourtCase> listOfRows) {
