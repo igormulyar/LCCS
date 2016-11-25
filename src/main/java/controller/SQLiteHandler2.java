@@ -4,6 +4,7 @@ import model.CourtCase;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -47,10 +48,10 @@ public class SQLiteHandler2 implements FileIOHandler {
             return courtCase;
         });
     }
-
+    @Transactional // hope this stuff will make operations within this method atomic
     @Override
     public void save(List<CourtCase> listOfRows) {
-        jdbcTemplate.execute("BEGIN TRANSACTION;");
+        //jdbcTemplate.execute("BEGIN TRANSACTION;");
         jdbcTemplate.update("DELETE FROM hearings;");
         for (CourtCase courtCase : listOfRows) {
             int numId = getNumId(courtCase.getNumber());
@@ -64,7 +65,7 @@ public class SQLiteHandler2 implements FileIOHandler {
                     courtCase.getAddress() + "');\n";
             jdbcTemplate.update(sql);
         }
-        jdbcTemplate.execute("COMMIT");
+        //jdbcTemplate.execute("COMMIT");
     }
 
     @Override
