@@ -16,7 +16,7 @@ public class Main {
         controller.addNumber("520/13447/16-п");
         controller.addNumber("520/6302/16-ц");
         controller.addNumber("521/21264/14-ц");
-        controller.addNumber("916/3325/15");
+        //controller.addNumber("916/3325/15");
 
         System.out.println("updating info...");
         System.out.println(controller.updateCaseList().toString());

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by igor on 14.10.16.
  */
 public class Controller {
-    private FileIOHandler ioHandler = new SQLiteHandler();
+    private FileIOHandler ioHandler = new SQLiteHandler2();
     private List<CourtCase> caseList = ioHandler.getCurrentListOfCases();
     private HttpExtractor extractor = new HttpExtractor();
 
