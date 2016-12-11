@@ -107,7 +107,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>restful.Application</mainClass>
+                            <mainClass>restful.controller.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
