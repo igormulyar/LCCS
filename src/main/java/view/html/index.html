@@ -1,13 +1,89 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
+
     <title>LCTS</title>
-    <meta name="keywords" content="law cases">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="style.css" media="all">
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="table.js"></script>
+
 </head>
+
 <body>
-<h1>Это страница, полученная от LCTS http методом GET</h1>
-<p>Ваще за**ись</p>
-<p>This is a test page</p>
+  <center>
+    <h1> Heading One
+    </h1>
+  </center>
+  <p>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </br>
+    Duis aute irure dolor in reprehenderit in voluptate velit
+    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  <table id="law">
+    <caption>Table</caption>
+    <thead>
+      <tr>
+        <th>Number</th>
+        <th>Date</th>
+        <th>Number</th>
+        <th>Involved</th>
+        <th>Description</th>
+        <th>Judge</th>
+        <th>Form</th>
+        <th>Address</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0001</td>
+        <td>21.12.2016</td>
+        <td>001</td>
+        <td>Ivanov A.B.</td>
+        <td>Short description of this issue</td>
+        <td>Petrov C.D.</td>
+        <td>012</td>
+        <td>ул. Маяковского 25</td>
+      </tr>
+      <tr>
+        <td>0002</td>
+        <td>22.12.2016</td>
+        <td>002</td>
+        <td>Sidorov A.B.</td>
+        <td>Краткое описание второго дела</td>
+        <td>Petrov C.D.</td>
+        <td>015</td>
+        <td>ул. Маяковского 25</td>
+      </tr>
+      <tr>
+        <td>0003</td>
+        <td>23.12.2016</td>
+        <td>003</td>
+        <td>Fedorov A.B.</td>
+        <td>Третье краткое описание</td>
+        <td>Kozlov C.D.</td>
+        <td>012</td>
+        <td>ул. Бунина 33</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <center>
+    <button class="button"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add number </button>
+    <button class="button"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete number </button>
+    <button class="button"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh data </button>
+  </center>
+
 </body>
+
+
+
 </html>
