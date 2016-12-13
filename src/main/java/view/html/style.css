@@ -1,0 +1,96 @@
+body{
+  font-family: Roboto, sans-serif;
+  font-weight: 100;
+}
+
+p {
+  margin: 10px;
+}
+
+.button {
+  border: 0;
+  margin: 7px;
+  padding: 10px;
+  font-family: Roboto, sans-serif;
+  font-size: 1.4rem;
+  color: #fff;
+  background-color: #333;
+  font-weight: 100;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #444;
+}
+
+table#law {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-family: Roboto, sans-serif;
+  font-weight: 100;
+  background: #333; color: #fff;
+  text-rendering: optimizeLegibility;
+  border-radius: 5px;
+}
+table#law caption {
+  font-size: 2rem; color: #444;
+  margin: 1rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left, center right;
+}
+table#law thead th { font-weight: 600; }
+table#law thead th, table#law tbody td {
+  padding: .8rem; font-size: 1.4rem;
+}
+table#law tbody td {
+  padding: .8rem; font-size: 1.4rem;
+  color: #444; background: #eee;
+}
+
+@media only screen and (max-width: 1200px) {
+  table#law tbody td {
+    font-size: 1.2rem;
+  }
+  table#law thead th, table#law tbody td {
+    font-size: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  table#law tbody td {
+    font-size: 0.9rem;
+  }
+  table#law thead th, table#law tbody td {
+    font-size: 0.9rem;
+  }
+}
+
+
+
+table#law tbody tr:nth-child(odd) > td {
+  background-color: #f5f5f5;
+}
+
+
+table#law tbody tr:not(:last-child) {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+@media screen and (max-width: 600px) {
+  table#law caption { background-image: none; }
+  table#law thead { display: none; }
+  table#law tbody td {
+    display: block; padding: .6rem;
+  }
+  table#law tbody tr td:first-child {
+    background: #666; color: #fff;
+  }
+	table#law tbody td:before {
+    content: attr(data-th);
+    font-weight: bold;
+    display: inline-block;
+    width: 6rem;
+  }
+}
