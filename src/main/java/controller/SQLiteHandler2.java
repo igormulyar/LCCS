@@ -1,19 +1,17 @@
 package controller;
 
 import model.CourtCase;
+import model.NumberTransferObject;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by TRUST on 27.10.2016.
  */
-public class SQLiteHandler2 implements FileIOHandler {
+public class SQLiteHandler2 {
 
     private JdbcTemplate jdbcTemplate;
 
@@ -27,12 +25,17 @@ public class SQLiteHandler2 implements FileIOHandler {
         initDB(); // Temporary solving of DB initialization. Need to decide where to move this. Would it be nice to use Flyway or any similar stuff?
     }
 
-    @Override
-    public List<String> getAllNumbers() {
-        return jdbcTemplate.query("SELECT number FROM numbers", (resultSet, i) -> resultSet.getString("number"));
+
+    public List<NumberTransferObject> getAllNumbers() {
+        return jdbcTemplate.query("SELECT * FROM numbers", (resultSet, i) -> {
+            NumberTransferObject nto = new NumberTransferObject();
+            nto.setId(resultSet.getInt("num_id"));
+            nto.setNumber(resultSet.getString("number"));
+            return nto;
+        });
     }
 
-    @Override
+
     public List<CourtCase> getCurrentListOfCases() {
         return jdbcTemplate.query("SELECT h.date, n.number, h.involved, h.description, h.judge, h.form, h.address\n" +
                 "FROM hearings h\n" +
@@ -50,7 +53,6 @@ public class SQLiteHandler2 implements FileIOHandler {
     }
 
     @Transactional // hope this stuff will make operations within this method atomic
-    @Override
     public void save(List<CourtCase> listOfRows) {
         //jdbcTemplate.execute("BEGIN TRANSACTION;");
         jdbcTemplate.update("DELETE FROM hearings;");
@@ -69,16 +71,17 @@ public class SQLiteHandler2 implements FileIOHandler {
         //jdbcTemplate.execute("COMMIT");
     }
 
-    @Override
     public void addNumber(String number) {
         jdbcTemplate.update("INSERT OR IGNORE INTO numbers (number) VALUES (?);", number);
     }
 
-    @Override
-    public void deleteNumber(String number) {
-        jdbcTemplate.update("DELETE FROM numbers WHERE number = ?;", number);
+    public void deleteNumberById(int numberId) {
+        jdbcTemplate.update("DELETE FROM numbers WHERE num_id = ?;", numberId);
     }
 
+
+    //---------------
+    //PRIVATE METHODS
     private void initDB() {
         jdbcTemplate.execute("PRAGMA FOREIGN_KEYS=ON;");
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS \"numbers\" (\n" +

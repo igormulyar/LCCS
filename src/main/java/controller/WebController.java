@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +16,7 @@ import java.util.List;
 @RestController
 public class WebController {
 
-    private FileIOHandler ioHandler = new SQLiteHandler2();
-    private List<CourtCase> caseList = ioHandler.getCurrentListOfCases();
+    private SQLiteHandler2 dbHandler = new SQLiteHandler2();
     private HttpExtractor extractor = new HttpExtractor();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -25,34 +25,33 @@ public class WebController {
     }
 
 
-    @RequestMapping(value = "/tracked_numbers", method = RequestMethod.GET)
-    public List<String> showAllNumbers (){
-        return ioHandler.getAllNumbers();
+    @RequestMapping(value = "/tracked_numbers", method = RequestMethod.GET, produces = "application/json")
+    public List<NumberTransferObject> showAllNumbers() {
+        return dbHandler.getAllNumbers();
     }
 
 
     @RequestMapping(value = "/tracked_numbers", method = RequestMethod.POST)
-    public void addNumber (@RequestBody String number){
-        ioHandler.addNumber(number);
+    public void addNumber(@RequestBody String number) {
+        dbHandler.addNumber(number);
     }
 
 
-    @RequestMapping(value = "/tracked_numbers/{num}", method = RequestMethod.DELETE)
-    public void deleteNumber(@PathVariable("num") String number){
-        ioHandler.deleteNumber(number);
+    @RequestMapping(value = "/tracked_numbers/{num_id}", method = RequestMethod.DELETE)
+    public void deleteNumber(@PathVariable("num_id") int id) {
+        dbHandler.deleteNumberById(id);
     }
 
 
-    @RequestMapping(value = "/hearings", method = RequestMethod.GET)
+    @RequestMapping(value = "/hearings", method = RequestMethod.GET, produces = "application/json")
     public List<CourtCase> showCurrentCases() {
-        updateCaseList();
-        return caseList;
+        return updateCaseList();
     }
 
 
     private String getPage() {
         StringBuilder sb = new StringBuilder();
-        try(BufferedReader reader = new BufferedReader(new FileReader("/home/igor/IdeaProjects/LCCS/src/main/java/view/html/index.html"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("/home/igor/IdeaProjects/LCCS/src/main/java/view/html/index.html"))) {
             String line = reader.readLine();
 
             while (line != null) {
@@ -60,17 +59,21 @@ public class WebController {
                 sb.append(System.lineSeparator());
                 line = reader.readLine();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return sb.toString();
     }
 
-    private void updateCaseList() {
-            List<String> allIds = ioHandler.getAllNumbers();
-            List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
-            ioHandler.save(courtCases);
-            caseList = courtCases;
+    private List<CourtCase> updateCaseList() {
+        List<NumberTransferObject> numbTransObjList = dbHandler.getAllNumbers();
+        List<String> allIds = new ArrayList<>();
+        for (NumberTransferObject nto : numbTransObjList) {
+            allIds.add(nto.getNumber());
+        }
+        List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
+        dbHandler.save(courtCases);
+        return courtCases;
     }
 
 }

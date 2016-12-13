@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by TRUST on 27.10.2016.
  */
-public class SQLiteHandler implements FileIOHandler {
+public class SQLiteHandler {
 
     private Connection connection;
     /*should I declare a field "PreparedStatement statement" here
@@ -70,7 +70,7 @@ public class SQLiteHandler implements FileIOHandler {
         }
     }
 
-    @Override
+
     public List<String> getAllNumbers() {
         List<String> ids = new ArrayList<>();
         try {
@@ -86,7 +86,7 @@ public class SQLiteHandler implements FileIOHandler {
         return ids;
     }
 
-    @Override
+
     public List<CourtCase> getCurrentListOfCases() {
         List<CourtCase> caseList = new ArrayList<>();
         try {
@@ -113,7 +113,7 @@ public class SQLiteHandler implements FileIOHandler {
         return caseList;
     }
 
-    @Override
+
     public void save(List<CourtCase> listOfRows) {
         if (listOfRows.size() > 0) {
             try {
@@ -144,7 +144,7 @@ public class SQLiteHandler implements FileIOHandler {
     }
 
 
-    @Override
+
     public void addNumber(String number) {
         try {
             String sql = "INSERT OR IGNORE INTO numbers (number) VALUES (?);";
@@ -157,7 +157,7 @@ public class SQLiteHandler implements FileIOHandler {
         }
     }
 
-    @Override
+
     public void deleteNumber(String number) {
         try {
             String sql = "DELETE FROM numbers WHERE number = ?;";
