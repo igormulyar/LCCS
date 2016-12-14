@@ -51,7 +51,7 @@ public class WebController {
 
     private String getPage() {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/view/html/index.html"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/index.html"))) {
             String line = reader.readLine();
 
             while (line != null) {
