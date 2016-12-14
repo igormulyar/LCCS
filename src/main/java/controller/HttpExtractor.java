@@ -75,7 +75,7 @@ public class HttpExtractor {
         ObjectMapper mapper = new ObjectMapper();
         List<Court> courts;
         try {
-            courts = Arrays.asList(mapper.readValue(new File("src/courts.json"), Court[].class));
+            courts = Arrays.asList(mapper.readValue(new File("src/main/java/model/courts.json"), Court[].class));
         } catch (IOException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
         }
