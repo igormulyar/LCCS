@@ -1,8 +1,9 @@
-$(document).ready(function () {
-  ready();
+document.addEventListener('DOMContentLoaded', function () {
+  addResponsiveToTable();
 });
 
-function ready() {
+
+function addResponsiveToTable() {
   var headertext = [],
   headers = document.querySelectorAll("#law th"),
   tablerows = document.querySelectorAll("#law th"),
