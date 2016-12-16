@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,8 +76,8 @@ public class HttpExtractor {
         ObjectMapper mapper = new ObjectMapper();
         List<Court> courts;
         try {
-            courts = Arrays.asList(mapper.readValue(new File("src/main/resources/courts.json"), Court[].class));
-        } catch (IOException e) {
+            courts = Arrays.asList(mapper.readValue(new File(getClass().getResource("/props/courts.json").toURI()), Court[].class));
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
         }
         //done//TODO Filtering STREAM !!!

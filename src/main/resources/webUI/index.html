@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Law page</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="table.js"></script>
+    <script src="law.js"></script>
+
+</head>
+
+<body>
+
+<h1 class="text-center">Heading One</h1>
+
+<p id='test-id'>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    In vitae dui quis dolor euismod gravida. Quisque ac massa ac justo aliquet sodales.
+    Curabitur vitae elementum urna. Suspendisse sit amet massa suscipit, facilisis ligula et,
+    porttitor metus. Nulla magna orci, suscipit maximus neque ut, eleifend bibendum dolor.
+    Nam at pellentesque arcu. Vestibulum ornare lorem lacus. </br>
+
+    Sed a velit facilisis, ullamcorper nulla sed, vestibulum risus. Proin pretium
+    quis ex sit amet aliquet. Cras accumsan, lorem eget porttitor aliquam, diam
+    mi condimentum sem, at vehicula sem quam vel ipsum. Fusce tempor consequat turpis,
+    sed accumsan mi tincidunt in. Aenean aliquet congue pulvinar. Morbi dictum elit
+    non quam varius dignissim. Nam faucibus feugiat dui, vel sagittis justo tincidunt non.
+    Maecenas sed massa blandit, aliquam lectus tristique, tristique nunc.
+    Curabitur massa turpis, molestie nec tortor dignissim, lacinia tempor metus.
+    Integer non semper velit, eu sagittis turpis.
+</p>
+
+<div class="text-right">
+    <button class="button refresh" title="Refresh data">&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;</button>
+</div>
+
+
+<div class="text-center">
+    <form id="add-form">
+        <input id="add-input" value="100" type="number" min="100" max="9999" class="input"><button id="add-button" class="button" type="submit"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add number</button>
+    </form>
+</div>
+
+</br>
+<table id="law">
+    <caption>Table</caption>
+    <thead>
+    <tr>
+        <th>Number</th>
+        <th>Date</th>
+        <th>Involved</th>
+        <th>Description</th>
+        <th>Judge</th>
+        <th>Form</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tbody id='tbody'>
+    <tr class='tr-table'>
+        <td><span class="delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></span> 0001</td>
+        <td>21.12.2016</td>
+        <td>Ivanov A.B.</td>
+        <td>Short description of this issue</td>
+        <td>Petrov C.D.</td>
+        <td>Форма 012</td>
+        <td>ул. Маяковского 25</td>
+    </tr>
+    <tr class='tr-table'>
+        <td><span class="delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></span> 0002</td>
+        <td>22.12.2016</td>
+        <td>Sidorov A.B.</td>
+        <td>Краткое описание второго дела</td>
+        <td>Petrov C.D.</td>
+        <td>015</td>
+        <td>ул. Маяковского 25</td>
+    </tr>
+    <tr class='tr-table'>
+        <td><span class="delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></span> 0003</td>
+        <td>23.12.2016</td>
+        <td>Fedorov A.B.</td>
+        <td>Третье краткое описание</td>
+        <td>Kozlov C.D.</td>
+        <td>Форма 012</td>
+        <td>ул. Бунина 33</td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+
+
+</body>
+
+
+
+</html>

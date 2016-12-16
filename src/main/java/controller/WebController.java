@@ -3,9 +3,7 @@ package controller;
 import model.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +17,16 @@ public class WebController {
     private SQLiteHandler2 dbHandler = new SQLiteHandler2();
     private HttpExtractor extractor = new HttpExtractor();
 
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String showPge() {
-        return getPage();
+    public String getMainPage () {
+        return getTextFileForBrowser("index.html");
+    }
+
+
+    @RequestMapping(value = "/{file:.+}", method = RequestMethod.GET)
+    public String getFile(@PathVariable("file") String filename) {
+        return getTextFileForBrowser(filename);
     }
 
 
@@ -49,9 +54,10 @@ public class WebController {
     }
 
 
-    private String getPage() {
+    private String getTextFileForBrowser(String filename) {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/index.html"))) {
+        InputStream is = getClass().getResourceAsStream(("/webUI/"+filename));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             String line = reader.readLine();
 
             while (line != null) {

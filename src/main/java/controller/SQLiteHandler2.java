@@ -97,7 +97,6 @@ public class SQLiteHandler2 {
                 "    \"form\" TEXT,\n" +
                 "    \"address\" TEXT,\n" +
                 "    FOREIGN KEY (num_id) REFERENCES numbers (num_id) ON DELETE CASCADE);");
-        System.out.println("DB init finished.");
     }
 
     private int getNumId(String number) {
