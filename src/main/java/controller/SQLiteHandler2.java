@@ -1,16 +1,18 @@
 package controller;
 
+import java.util.List;
+
 import model.CourtCase;
 import model.NumberTransferObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by TRUST on 27.10.2016.
  */
+@Component
 public class SQLiteHandler2 {
 
     private JdbcTemplate jdbcTemplate;

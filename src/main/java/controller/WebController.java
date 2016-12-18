@@ -1,11 +1,16 @@
 package controller;
 
-import model.*;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import model.CourtCase;
+import model.NumberTransferObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by igor on 14.10.16.
@@ -14,49 +19,49 @@ import java.util.List;
 @RestController
 public class WebController {
 
-    private SQLiteHandler2 dbHandler = new SQLiteHandler2();
-    private HttpExtractor extractor = new HttpExtractor();
+    private final SQLiteHandler2 dbHandler ;
 
+    private final HttpExtractor extractor;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getMainPage () {
+    @Autowired
+    public WebController(SQLiteHandler2 dbHandler, HttpExtractor extractor) {
+        this.dbHandler = dbHandler;
+        this.extractor = extractor;
+    }
+
+    @GetMapping("/")
+    public String getMainPage() {
         return getTextFileForBrowser("index.html");
     }
 
-
-    @RequestMapping(value = "/{file:.+}", method = RequestMethod.GET)
+    @GetMapping("/{file:.+}")
     public String getFile(@PathVariable("file") String filename) {
         return getTextFileForBrowser(filename);
     }
 
-
-    @RequestMapping(value = "/tracked_numbers", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping("/tracked_numbers")
     public List<NumberTransferObject> showAllNumbers() {
         return dbHandler.getAllNumbers();
     }
 
-
-    @RequestMapping(value = "/tracked_numbers", method = RequestMethod.POST)
+    @PostMapping("/tracked_numbers")
     public void addNumber(@RequestBody String number) {
         dbHandler.addNumber(number);
     }
 
-
-    @RequestMapping(value = "/tracked_numbers/{num_id}", method = RequestMethod.DELETE)
-    public void deleteNumber(@PathVariable("num_id") int id) {
+    @DeleteMapping("/tracked_numbers/{id}")
+    public void deleteNumber(@PathVariable int id) {
         dbHandler.deleteNumberById(id);
     }
 
-
-    @RequestMapping(value = "/hearings", method = RequestMethod.GET, produces = "application/json")
+    @GetMapping("/hearings")
     public List<CourtCase> showCurrentCases() {
         return updateCaseList();
     }
 
-
     private String getTextFileForBrowser(String filename) {
         StringBuilder sb = new StringBuilder();
-        InputStream is = getClass().getResourceAsStream(("/webUI/"+filename));
+        InputStream is = getClass().getResourceAsStream(("/webUI/" + filename));
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             String line = reader.readLine();
 
@@ -72,14 +77,11 @@ public class WebController {
     }
 
     private List<CourtCase> updateCaseList() {
-        List<NumberTransferObject> numbTransObjList = dbHandler.getAllNumbers();
-        List<String> allIds = new ArrayList<>();
-        for (NumberTransferObject nto : numbTransObjList) {
-            allIds.add(nto.getNumber());
-        }
+        List<String> allIds = dbHandler.getAllNumbers().stream()
+                                       .map(NumberTransferObject::getNumber)
+                                       .collect(Collectors.toList());
         List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
         dbHandler.save(courtCases);
         return courtCases;
     }
-
 }
