@@ -1,18 +1,17 @@
-package controller;
+package com.igormulyar.lcts.controller;
 
 import java.util.List;
 
-import model.CourtCase;
-import model.NumberTransferObject;
+import com.igormulyar.lcts.model.CourtCase;
+import com.igormulyar.lcts.model.NumberTransferObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by TRUST on 27.10.2016.
  */
-@Component
+//@Component
 public class SQLiteHandler2 {
 
     private JdbcTemplate jdbcTemplate;

@@ -1,16 +1,14 @@
-package controller;
+package com.igormulyar.lcts.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
-import model.Court;
-import model.CourtCase;
+import com.igormulyar.lcts.model.Court;
+import com.igormulyar.lcts.model.CourtCase;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -33,11 +31,11 @@ public class HttpExtractor {
 
     public List<CourtCase> extractCourtCases(List<String> allIds) {
         return allIds.stream()
-                     .map(this::getCourtForRequest)
-                     .map(this::getCourtCases)
-                     .flatMap(List::stream)
-                     .filter(courtCase -> allIds.contains(courtCase.getNumber()))
-                     .collect(Collectors.toList());
+                .map(this::getCourtForRequest)
+                .map(this::getCourtCases)
+                .flatMap(List::stream)
+                .filter(courtCase -> allIds.contains(courtCase.getNumber()))
+                .collect(Collectors.toList());
     }
 
     /*
@@ -64,14 +62,20 @@ public class HttpExtractor {
         HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
         ResponseEntity<String> response = restTemplate.exchange(court.getUrl(), HttpMethod.POST, httpEntity, String.class);
         try {
-            return Arrays.asList(mapper.readValue(response.getBody(), CourtCase[].class));
+            List<CourtCase> courtCases = Arrays.asList(mapper.readValue(response.getBody(), CourtCase[].class));
+            for (CourtCase courtCase: courtCases){
+                courtCase.setCourtName(court.getName());
+            }
+            return courtCases;
         } catch (IOException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
         }
     }
 
     private Court getCourtForRequest(String caseNumber) {
-        try {
+
+        //MAX's
+        /*try {
             File file = new File(getClass().getResource("/props/courts.json").toURI());
             String courtId = caseNumber.substring(0, 3);
             return Arrays.stream(mapper.readValue(file, Court[].class))
@@ -80,6 +84,18 @@ public class HttpExtractor {
                          .get();
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
+        }*/
+
+        //My - fixed problem with finding the resource when running from jar
+        InputStream is = getClass().getResourceAsStream("/props/courts.json");
+        try {
+            return Arrays.stream(mapper.readValue(is, Court[].class))
+                    .filter(c -> c.getIdInNumber().equals(caseNumber.substring(0, 3)))
+                    .findAny()
+                    .get();
+        } catch (IOException e) {
+            throw new RuntimeJsonMappingException(e.getMessage());
         }
     }
 }
+

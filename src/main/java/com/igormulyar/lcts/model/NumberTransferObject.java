@@ -1,13 +1,28 @@
-package model;
+package com.igormulyar.lcts.model;
 
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by igor on 13.12.16.
  */
+@Entity
 public class NumberTransferObject {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String number;
+
+    public NumberTransferObject() {
+    }
+
+    public NumberTransferObject(String number) {
+        this.number = number;
+    }
 
     public int getId() {
         return id;
@@ -32,5 +47,4 @@ public class NumberTransferObject {
                 ", number='" + number + '\'' +
                 '}';
     }
-
 }
