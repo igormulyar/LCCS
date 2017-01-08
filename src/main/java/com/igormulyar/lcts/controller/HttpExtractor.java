@@ -84,9 +84,7 @@ public class HttpExtractor {
         ResponseEntity<String> response = restTemplate.exchange(court.getUrl(), HttpMethod.POST, httpEntity, String.class);
         try {
             List<CourtCase> courtCases = Arrays.asList(mapper.readValue(response.getBody(), CourtCase[].class));
-            for (CourtCase courtCase: courtCases){
-                courtCase.setCourtName(court.getName());
-            }
+            courtCases.forEach(c -> c.setCourtName(court.getName()));
             return courtCases;
         } catch (IOException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
