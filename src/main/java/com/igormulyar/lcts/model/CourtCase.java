@@ -15,7 +15,7 @@ public class CourtCase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String date;
     private String number;
     @Column(length = 1200)

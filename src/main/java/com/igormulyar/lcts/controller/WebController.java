@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import com.igormulyar.lcts.model.CourtCase;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class WebController {
 
     private final DAODatabase daoDatabase;
-
     private final HttpExtractor extractor;
 
     @Autowired
@@ -31,6 +28,8 @@ public class WebController {
         this.daoDatabase = daoDatabase;
         this.extractor = extractor;
     }
+
+
 
     @GetMapping("/")
     public String getMainPage() {
@@ -41,11 +40,6 @@ public class WebController {
     public String getFile(@PathVariable("file") String filename) {
         return getTextFileForBrowser(filename);
     }
-
-    /*@GetMapping("/tracked_numbers")
-    public List<NumberTransferObject> showAllNumbers() {
-        return daoDatabase.getAllNumbers();
-    }*/
 
     @PostMapping("/tracked_numbers")
     public void addNumber(@RequestBody String number) {
@@ -61,6 +55,8 @@ public class WebController {
     public List<ExtendedCourtCase> showCurrentCases() {
         return updateCaseList();
     }
+
+
 
 
     private String getTextFileForBrowser(String filename) {
@@ -88,15 +84,18 @@ public class WebController {
                 .collect(Collectors.toList());
         List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
         daoDatabase.saveCases(courtCases);
+        return getExtendedCourtCases(numberDTOList);
+    }
 
+    private List<ExtendedCourtCase> getExtendedCourtCases(List<NumberTransferObject> numberDTOList) {
         //creating the list of extendedCourtCases with nullable fields in order to present them for the frontend
         List<ExtendedCourtCase> extendedCourtCases = daoDatabase.getAllCases();
-        ListIterator<ExtendedCourtCase> it = extendedCourtCases.listIterator();
+        List<NumberTransferObject> numbersFromCourtCases = extendedCourtCases.stream()
+                .map(ExtendedCourtCase::getNumber)
+                .collect(Collectors.toList());
         for (NumberTransferObject nto : numberDTOList) {
-            while (it.hasNext()) {
-                if (!it.next().getNumber().equals(nto)) {
-                    it.add(new ExtendedCourtCase(nto));
-                }
+            if(!numbersFromCourtCases.contains(nto)){
+                extendedCourtCases.add(new ExtendedCourtCase(nto));
             }
         }
         return extendedCourtCases;

@@ -1,8 +1,10 @@
 package com.igormulyar.lcts.controller;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,15 +32,34 @@ public class HttpExtractor {
     }
 
     public List<CourtCase> extractCourtCases(List<String> allIds) {
-        return allIds.stream()
+        List<CourtCase> resultCaseList = new ArrayList<>();
+        for (String caseNumber : allIds) {
+            Court court = null;
+            try {
+                court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
+            } catch (NoSuchElementException e){
+                e.printStackTrace();
+                System.out.println("MESSAGE: Didn't find coincidence for number "+caseNumber+" when looking for court with court ID: "+caseNumber.substring(0,3));      // to avoid application crashing when getCourtCases
+            }
+            if (court == null){
+                continue;
+            }
+            List<CourtCase> caseList = getCourtCases(court);
+            resultCaseList.addAll(caseList.stream()
+                    .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
+                    .collect(Collectors.toList()));
+        }
+        // this stream doesn't work correctly // TODO: Try to fix that stream
+        /*List<CourtCase> list = allIds.stream()
                 .map(this::getCourtForRequest)
                 .map(this::getCourtCases)
                 .flatMap(List::stream)
                 .filter(courtCase -> allIds.contains(courtCase.getNumber()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+        return resultCaseList;
     }
 
-    /*
+    /**
     This method makes a http POST-Request to the URL with headers and request body
     url, referer-header and courtId are parameters used in order to make a correct request
     returns a list of court cases fetched from server
@@ -73,20 +94,6 @@ public class HttpExtractor {
     }
 
     private Court getCourtForRequest(String caseNumber) {
-
-        //MAX's
-        /*try {
-            File file = new File(getClass().getResource("/props/courts.json").toURI());
-            String courtId = caseNumber.substring(0, 3);
-            return Arrays.stream(mapper.readValue(file, Court[].class))
-                         .filter(c -> c.getIdInNumber().equals(courtId))
-                         .findAny()
-                         .get();
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeJsonMappingException(e.getMessage());
-        }*/
-
-        //My - fixed problem with finding the resource when running from jar
         InputStream is = getClass().getResourceAsStream("/props/courts.json");
         try {
             return Arrays.stream(mapper.readValue(is, Court[].class))
