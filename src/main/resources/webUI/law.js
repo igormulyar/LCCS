@@ -4,20 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var Law = function() {
     var LINK = 'http://localhost:8080',
-        casesIdArray,
-        numbersArray,
         allInfoArray;
-
-    this.getcasesIdArray = function(){
-      return casesIdArray;
-    }
 
     this.getAllInfoArray = function(){
       return allInfoArray;
     }
 
     this.getAmountOfCases = function(){
-      return casesIdArray.length;
+      return allInfoArray.length;
     }
 
     this.addNumber = function(number) {
@@ -28,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var xhr = new XMLHttpRequest(),
           url = LINK + "/tracked_numbers/",
           params = number;
-      xhr.open("POST", url, true);
+      xhr.open("POST", url, false);
       xhr.send(params);
     }
 
@@ -43,72 +37,60 @@ document.addEventListener('DOMContentLoaded', function () {
       xhr.send(params);
     }
 
-    this.showList = function() {
-      //  GET /tracked_numbers/
+    this.getCases = function() {
+      // GET /hearigs/
+      // get all cases from server
       // Показать список номеров дел, которые отслеживаются
-      // response возвращает массив номеров дел [{number}{number}{number}] в джейсоне,
-      // чтобы показывать пользователю, какие номера сейчас are supposed to be tracked"
-      var xhr = new XMLHttpRequest(),
-          url = LINK + "/tracked_numbers/",
-          params = '',
-          result = 'empty';
-          casesIdArray = [];
-          numbersArray = [];
-      xhr.open("GET", url, false);
-      xhr.send(params);
-      for (i = 0; i < JSON.parse(xhr.responseText).length; i++ ){
-        casesIdArray.push(JSON.parse(xhr.responseText)[i].id);
-        numbersArray.push(JSON.parse(xhr.responseText)[i].number);
-      }
-      return xhr.responseText;
-    }
-
-
-    this.getIdByName = function (name) {
-      var result;
-      for (i = 0; i < JSON.parse(this.showList()).length; i++ ) {
-        if (name == JSON.parse(this.showList())[i].number) {
-          result =  JSON.parse(this.showList())[i].id;
-        }
-      }
-      return result;
-    }
-
-
-    this.showInfo = function() {
-      //  GET /hearings
-      // обновить и показать информацию по отслеженным делам (выполнить новый поиск)
-      // response возвращает массив дел (а каждое дело содержит поля: дата, номер, учасники и т.п.) в джейсоне.
-      // Прежде чем вернуть массив дел, будет проведен новый поиск, результаты которого будут записаны в базу данных.
       allInfoArray = [];
       var xhr = new XMLHttpRequest(),
           url = LINK + "/hearings/",
           params = '';
       xhr.open("GET", url, false);
+      xhr.onreadystatechange = function() {
+        if (this.readyState != 4) return;
+        allInfoArray = JSON.parse(xhr.responseText);
+        console.log(allInfoArray);
+      };
       xhr.send(params);
-      allInfoArray = JSON.parse(xhr.responseText);
-      return xhr.responseText;
+    }
+
+    this.clearXss = function(text){
+      var text = text || "",
+          lt = /</g,
+          gt = />/g,
+          ap = /'/g,
+          ic = /"/g;
+      if (text!=null && text!=undefined && text!="undefined" && text!=""){
+        return text.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+      }
+      else {
+        return EMPTY;
+      }
     }
 
     this.fillTable = function(num) {
 
       if (!allInfoArray[num]){
-        allInfoArray[num] = {date: EMPTY,
-                            involved: EMPTY,
-                            description: EMPTY,
-                            judge: EMPTY,
-                            forma: EMPTY,
-                            add_address: EMPTY};
+        allInfoArray[num] = {
+          date: EMPTY,
+          involved: EMPTY,
+          description: EMPTY,
+          judge: EMPTY,
+          form: EMPTY,
+          address: EMPTY,
+          courtName: EMPTY
+        };
       }
       var buffer = {
-          number: numbersArray[num],
-          id: casesIdArray[num],
-          date: allInfoArray[num].date || 'noinfo',
-          involved: allInfoArray[num].involved,
-          description: allInfoArray[num].description,
-          judge: allInfoArray[num].judge,
-          forma: allInfoArray[num].forma,
-          add_address: allInfoArray[num].add_address
+          number: this.clearXss(allInfoArray[num].number.number) || 0,
+          id: this.clearXss(allInfoArray[num].number.id) || 0,
+          date: this.clearXss(allInfoArray[num].date) || EMPTY,
+          involved: this.clearXss(allInfoArray[num].involved) || EMPTY,
+          description: this.clearXss(allInfoArray[num].description) || EMPTY,
+          judge: this.clearXss(allInfoArray[num].judge) || EMPTY,
+          form: this.clearXss(allInfoArray[num].form) || EMPTY,
+          address: this.clearXss(allInfoArray[num].address) || EMPTY,
+          courtName: this.clearXss(allInfoArray[num].courtName) || EMPTY
          };
       table.addRow(buffer);
     }
@@ -163,6 +145,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     this.convertDateToGoogleFormat = function(date) {
       var date = date || '01.01.1999 10:00';
+      if (!date || date == EMPTY) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        if(dd < 10) {
+          dd = '0' + dd
+        }
+        if(mm < 10) {
+          mm = '0' + mm
+        }
+        date = dd + '.' + mm + '.' + yyyy + ' 08:00';
+      } else {
+        date = date;
+      }
       var result,
           timeForSession = 2,
           onlyDate = date.split(' ')[0],
@@ -176,31 +173,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     this.createGoogleLink = function(obj){
-      var obj = obj || {number: 'n', date: '01.01.1999 10:00', involved: 'i', description: 'd', judge: 'j', forma: 'f', add_address: 'a' };
+      var obj = obj || {number: 'n', date: '01.01.1999 10:00', involved: 'i', description: 'd', judge: 'j', form: 'f', address: 'a', courtName: 'c' };
       var result = '#';
 
       result = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
                '&text=' + encodeURIComponent(obj.number) +
-               '&location=' + encodeURIComponent(obj.add_address) +
+               '&location=' + encodeURIComponent(obj.address + ', ' + obj.courtName) +
                '&dates=' + encodeURIComponent(this.convertDateToGoogleFormat(obj.date)) +
-               '&details=' + encodeURIComponent(obj.forma + ': ' +  obj.description + '.\n' + obj.involved + '.\nСуддя: ' + obj.judge ) +
+               '&details=' + encodeURIComponent(obj.form + ': ' +  obj.description + '.\n' + obj.involved + '.\nСуддя: ' + obj.judge ) +
                '&trp=false&pli=1&sf=true&output=xml';
 
       return (result);
     }
 
+    this.createReyestrLink = function(num){
+      //TODO: rebuild this function
+      var num = num || "none",
+          result = '#';
+      result = 'http://reyestr.court.gov.ua/?CaseNumber=' + encodeURIComponent(num) + '&PagingInfo.ItemsPerPage=25&Sort=1';
+      return result;
+    }
+
     this.addRow = function(obj) {
       obj = obj || {number: 'empty'};
-      var tr = document.createElement('tr');  //law.getIdByName(obj.id)
-      // tr.className = this.getTimeMarker(obj.date);
-      tr.innerHTML = '<td data-javaid="' + obj.id + '"><span class="delete-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></span> ' + obj.number + '</td>' +
-                      '<td><a href="' + this.createGoogleLink(obj) + '" title="Add to Google calendar" class="google-link" target="_blank"><i class="fa indicator ' +
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td data-javaid="' + obj.id + '"><span class="delete-btn tooltip grey-tooltip mini-tooltip" data-help="Delete case from list"><i class="fa fa-trash-o" aria-hidden="true"></i></span> ' +
+                      '<a class="tooltip grey-tooltip mini-tooltip" data-help="Look at additional files" href="' + this.createReyestrLink(obj.number) + '" target=_blank>' +  obj.number + '</a></td>' +
+                      '<td><a href="' + this.createGoogleLink(obj) + '" data-help="Add to Google calendar" class="google-link tooltip grey-tooltip mini-tooltip" target="_blank"><i class="fa indicator ' +
                       this.getTimeMarker(obj.date) + '" aria-hidden="true"></i></a> ' + this.breakDate(obj.date) + '</td>' +
                       '<td>' + obj.involved + '</td>' +
                       '<td>' + obj.description + '</td>' +
                       '<td>' + obj.judge + '</td>' +
-                      '<td>' + obj.forma + '</td>' +
-                      '<td>' + obj.add_address + '</td>' ;
+                      '<td>' + obj.form + '</td>' +
+                      '<td><span class="tooltip grey-tooltip" data-help="' + obj.address + '">' + obj.courtName + '</span></td>' ;
       document.getElementById(TABLE_ID).appendChild(tr);
       getByClassName(delBtn);
       return false;
@@ -221,8 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
     involved: 'Loading...',
     description: 'Loading...',
     judge: 'Loading...',
-    forma: 'Loading...',
-    add_address: 'Loading...'
+    form: 'Loading...',
+    address: 'Loading...',
+    courtName: 'Loading...'
   };
 
   var table = new Table;
@@ -258,6 +264,20 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
 
+  document.getElementById('add-input').onkeydown = function(event) {
+    if ((event.keyCode == 13) && (document.getElementById('add-input').value.match(/(.{3})\/(.*)\/(.{2})-[агкпц]/gi)) ) {
+        startAnimation();
+    }
+  };
+
+  document.getElementById('add-input').onkeypress = function(event) {
+    if ((event.keyCode == 13) ) {
+      //code
+    }
+  };
+
+
+
   // GETTER FOR DELETE BUTTON
   function getByClassName(el) {
     for (i = 0; i < el.length; i++) {
@@ -272,9 +292,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function loadAllCases(){
-    law.showList();
-    law.showList();
-    law.showInfo();
+    law.getCases();
+    // law.getCases();
     table.deleteAllRaws();
     for (let i = 0; i < law.getAmountOfCases(); i++) {
       law.fillTable(i);

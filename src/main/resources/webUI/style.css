@@ -107,7 +107,7 @@ p {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 799px) {
+@media only screen and (max-width: 800px) {
   .delete-btn:hover  {
     color: #eee;
     cursor: pointer;
@@ -142,7 +142,7 @@ table#law thead th, table#law tbody td {
   font-size: 1.2rem;
 }
 table#law tbody td {
-  word-break: normal;
+  word-break: break-word;
   padding: .8rem;
   font-size: 1.2rem;
   color: #444;
@@ -181,6 +181,15 @@ table#law tbody td {
 .th-date {
   min-width: 110px;
 }
+.th-form {
+  min-width: 110px;
+  max-width: 200px;
+}
+
+.th-court {
+  min-width: 130px;
+  max-width: 230px;
+}
 
 @media only screen and (min-width: 1201px) {
   .th-number {
@@ -189,6 +198,16 @@ table#law tbody td {
   .th-date {
     min-width: 150px;
   }
+  .th-form {
+    min-width: 140px;
+    max-width: 250px;
+  }
+
+  .th-court {
+    min-width: 180px;
+    max-width: 280px;
+  }
+
 }
 
 table#law tbody tr:nth-child(odd) > td {
@@ -201,7 +220,7 @@ table#law tbody tr:not(:last-child) {
   border-bottom: 1px solid #ddd;
 }
 
-@media screen and (max-width: 799px) {
+@media screen and (max-width: 800px) {
   table#law caption {
     background-image: none;
   }
@@ -243,4 +262,67 @@ table#law tbody tr:not(:last-child) {
 
 .priority-none{
   color: #9e9e9e;
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    outline: none;
+    text-indent: 0;
+
+}
+.tooltip:hover:before {
+    content: attr(data-help);
+    white-space: pre-line;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    z-index: 9999;
+    margin-left: -50%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    opacity: .9;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #eee;
+
+}
+
+.mini-tooltip:hover:before {
+  width: 210px;
+
+}
+
+.grey-tooltip:hover:before {
+    border: none;
+    background-color: #1e1e1e;
+}
+
+/*.grey-tooltip:hover:after {
+    border-top-color: rgba(51,51,51,0.95);
+}*/
+
+
+a {
+  color: #444;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #333;
+}
+
+
+@media only screen and (max-width: 800px) {
+  a {
+    color: #f5f5f5;
+    text-decoration: none;
+  }
+
+  a:hover{
+    color: #eee;
+  }
+
+
 }
