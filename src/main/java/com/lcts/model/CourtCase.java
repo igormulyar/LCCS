@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.model;
+package com.lcts.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

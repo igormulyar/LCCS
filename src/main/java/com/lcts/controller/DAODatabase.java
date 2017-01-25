@@ -1,8 +1,8 @@
-package com.igormulyar.lcts.controller;
+package com.lcts.controller;
 
-import com.igormulyar.lcts.model.CourtCase;
-import com.igormulyar.lcts.model.ExtendedCourtCase;
-import com.igormulyar.lcts.model.NumberTransferObject;
+import com.lcts.model.CourtCase;
+import com.lcts.model.ExtendedCourtCase;
+import com.lcts.model.NumberTransferObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

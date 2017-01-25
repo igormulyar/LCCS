@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.controller;
+package com.lcts.controller;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
-import com.igormulyar.lcts.model.Court;
-import com.igormulyar.lcts.model.CourtCase;
+import com.lcts.model.Court;
+import com.lcts.model.CourtCase;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

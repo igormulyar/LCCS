@@ -1,6 +1,6 @@
-package com.igormulyar.lcts.controller;
+package com.lcts.controller;
 
-import com.igormulyar.lcts.model.CourtCase;
+import com.lcts.model.CourtCase;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 

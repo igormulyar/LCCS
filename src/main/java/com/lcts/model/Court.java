@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.model;
+package com.lcts.model;
 
 /**
  * Created by TRUST on 08.11.2016.

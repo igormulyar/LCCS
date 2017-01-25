@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.model;
+package com.lcts.model;
 
 /**
  * Created by igor on 07.01.17.

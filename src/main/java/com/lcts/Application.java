@@ -1,4 +1,4 @@
-package com.igormulyar.lcts;
+package com.lcts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

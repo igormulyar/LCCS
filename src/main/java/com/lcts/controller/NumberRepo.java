@@ -1,6 +1,6 @@
-package com.igormulyar.lcts.controller;
+package com.lcts.controller;
 
-import com.igormulyar.lcts.model.NumberTransferObject;
+import com.lcts.model.NumberTransferObject;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 

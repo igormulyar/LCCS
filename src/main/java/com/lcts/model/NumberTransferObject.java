@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.model;
+package com.lcts.model;
 
 
 import javax.persistence.Entity;

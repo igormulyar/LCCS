@@ -1,4 +1,4 @@
-package com.igormulyar.lcts.controller;
+package com.lcts.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.igormulyar.lcts.model.CourtCase;
-import com.igormulyar.lcts.model.ExtendedCourtCase;
-import com.igormulyar.lcts.model.NumberTransferObject;
+import com.lcts.model.CourtCase;
+import com.lcts.model.ExtendedCourtCase;
+import com.lcts.model.NumberTransferObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
