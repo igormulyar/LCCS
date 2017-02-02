@@ -30,7 +30,6 @@ public class WebController {
     }
 
 
-
     @GetMapping("/")
     public String getMainPage() {
         return getTextFileForBrowser("index.html");
@@ -55,8 +54,6 @@ public class WebController {
     public List<ExtendedCourtCase> showCurrentCases() {
         return updateCaseList();
     }
-
-
 
 
     private String getTextFileForBrowser(String filename) {
@@ -94,7 +91,7 @@ public class WebController {
                 .map(ExtendedCourtCase::getNumber)
                 .collect(Collectors.toList());
         for (NumberTransferObject nto : numberDTOList) {
-            if(!numbersFromCourtCases.contains(nto)){
+            if (!numbersFromCourtCases.contains(nto)) {
                 extendedCourtCases.add(new ExtendedCourtCase(nto));
             }
         }

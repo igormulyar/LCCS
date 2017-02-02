@@ -37,11 +37,11 @@ public class HttpExtractor {
             Court court = null;
             try {
                 court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 e.printStackTrace();
-                System.out.println("MESSAGE: Didn't find coincidence for number "+caseNumber+" when looking for court with court ID: "+caseNumber.substring(0,3));      // to avoid application crashing when getCourtCases
+                System.out.println("MESSAGE: Didn't find coincidence for number " + caseNumber + " when looking for court with court ID: " + caseNumber.substring(0, 3));      // to avoid application crashing when getCourtCases
             }
-            if (court == null){
+            if (court == null) {
                 continue;
             }
             List<CourtCase> caseList = getCourtCases(court);
@@ -60,10 +60,10 @@ public class HttpExtractor {
     }
 
     /**
-    This method makes a http POST-Request to the URL with headers and request body
-    url, referer-header and courtId are parameters used in order to make a correct request
-    returns a list of court cases fetched from server
-    */
+     * This method makes a http POST-Request to the URL with headers and request body
+     * url, referer-header and courtId are parameters used in order to make a correct request
+     * returns a list of court cases fetched from server
+     */
     private List<CourtCase> getCourtCases(Court court) {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
                 HttpClientBuilder.create().build());
@@ -84,7 +84,10 @@ public class HttpExtractor {
         ResponseEntity<String> response = restTemplate.exchange(court.getUrl(), HttpMethod.POST, httpEntity, String.class);
         try {
             List<CourtCase> courtCases = Arrays.asList(mapper.readValue(response.getBody(), CourtCase[].class));
-            courtCases.forEach(c -> c.setCourtName(court.getName()));
+            courtCases.forEach(c -> {
+                c.setCourtName(court.getName());
+                c.setJudge(c.getJudge().trim());
+            });
             return courtCases;
         } catch (IOException e) {
             throw new RuntimeJsonMappingException(e.getMessage());
