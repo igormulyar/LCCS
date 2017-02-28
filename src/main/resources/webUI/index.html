@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Law page</title>
+  <title>LCTS: Law Cases Tracking System</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
@@ -17,61 +17,84 @@
 
 <body>
 
-  <h1 class="text-center">Heading One</h1>
+<h1 class="text-center">Law Cases Tracking System</h1>
 
-  <p id='test-id'>
-    Lorem2 ipsum dolor sit amet, consectetur adipiscing elit.
-    In vitae dui quis dolor euismod gravida. Quisque ac massa ac justo aliquet sodales.
-    Curabitur vitae elementum urna. Suspendisse sit amet massa suscipit, facilisis ligula et,
-    porttitor metus. Nulla magna orci, suscipit maximus neque ut, eleifend bibendum dolor.
-    Nam at pellentesque arcu. Vestibulum ornare lorem lacus. </br>
+<p>
+  LCTS is a training project created in order to improve programming skills and create something useful. <br />
+  The main idea is to help Ukrainian attorneys with tracking the appointed court hearings. <br />
+  Using the open state register LCTS looks for and collects the information about your court cases which are assigned for court proceedings. <br />
+  Just add the case numbers. LCTS will track them automatically.
+</p>
 
-    Sed a velit facilisis, ullamcorper nulla sed, vestibulum risus. Proin pretium
-    quis ex sit amet aliquet. Cras accumsan, lorem eget porttitor aliquam, diam
-    mi condimentum sem, at vehicula sem quam vel ipsum. Fusce tempor consequat turpis,
-    sed accumsan mi tincidunt in. Aenean aliquet congue pulvinar. Morbi dictum elit
-    non quam varius dignissim. Nam faucibus feugiat dui, vel sagittis justo tincidunt non.
-    Maecenas sed massa blandit, aliquam lectus tristique, tristique nunc.
-    Curabitur massa turpis, molestie nec tortor dignissim, lacinia tempor metus.
-    Integer non semper velit, eu sagittis turpis.
-  </p>
+<div class="text-right">
+  <button id="refresh-btn" class="button refresh" title="Refresh data">&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;</button>
+</div>
 
-  <div class="text-right">
-    <button id="refresh-btn" class="button refresh" title="Refresh data">&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;</button>
-  </div>
 
-  <span id="loading" class="animation">
+<span id="loading" class="animation">
     <i class="fa fa-refresh" aria-hidden="true"></i>
   </span>
 
 <div class="text-center">
-    <form id="add-form">
-      <input id="add-input" value="" type="text" maxlength="15" pattern="(.{3})\/(.*)\/(.{2})-[агкпц]" class="input"><button id="add-button" class="button" type="submit"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add number</button>
+  <form id="add-form">
+    <input id="add-input" value="" type="text" maxlength="15" pattern="(.{3})\/(.*)\/(.{2})-[агкпц]" class="input"><button id="add-button" class="button" type="submit"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add number</button>
   </form>
 </div>
 
 </br>
-  <table id="law">
-    <caption>Table</caption>
-    <thead>
-      <tr>
-        <th class='th-number'>Number</th>
-        <th class='th-date'>Date</th>
-        <th>Involved</th>
-        <th>Description</th>
-        <th class='th-form'>Judge</th>
-        <th class='th-form'>Form</th>
-        <th class='th-court'>Court Name</th>
-      </tr>
-    </thead>
-    <tbody id='tbody'>
-    <!-- Cases info will be here -->
-    </tbody>
-  </table>
+<table id="law">
+  <caption>Tracked cases</caption>
+  <thead>
+  <tr>
+    <th class='th-number'>Number</th>
+    <th class='th-date'>Date</th>
+    <th>Involved</th>
+    <th>Description</th>
+    <th class='th-form'>Judge</th>
+    <th class='th-form'>Form</th>
+    <th class='th-court'>Court Name</th>
+  </tr>
+  </thead>
+  <tbody id='tbody'>
+  <!-- Cases info will be here -->
+  </tbody>
+</table>
 
-  <br>
-  <br>
+<br><br><br>
+<br><br><br>
 
+<div id='version-info' class='version-info'>
+  <p class="text-center">
+      <span class='bold'>
+        <i class="fa fa-question-circle" aria-hidden="true"></i> Инструкции:
+      </span>
+  </p>
+
+  <span class='bold'>1.</span> Чтобы добавить номер дела вставьте его в форму и нажмите кнопку Add number.
+  Номер дела должен быть введен точно в таком же виде и формате, в каком он был сгенерирован в суде. Пример номера: 111/2232/17-ц
+  <br /><br />
+  <span class='bold'>2.</span> Новый поиск по делам проводится при каждой загрузке страницы / добавлении нового номера / удалении / нажатии на кнопку обновления.
+  Если информация по делу по каким-то причинам не найдена, дело будет отображено в таблице с пометками 'no info'.
+  <br /><br />
+  <span class='bold'>3.</span> Для удаления дела нажмите кнопку с изображением корзинки в строке соответсвующего номера.
+  <br /><br />
+  <span class='bold'>4.</span> Чтобы добавить напоминание в Google Calendar - нажмите на дату в соответствующей строке.
+  <br /><br />
+  <span class='bold'>Инофрмация о версии:</span><br />
+  Текущая версия приложения поддерживает поиск в следующих судах:
+  Приморский г. Одессы, Киевский г. Одессы, Суворовский г. Одессы и т. д.<br />
+  Поиск дел в судах апелляционных инстанций в текущий момент недоступен.
+  <br /><br />
+  <span class='bold'>Vladislav Yevsikov</span> - frontend<br />
+  <span class='bold'>Igor Mulyar</span> - идея, backend<br />
+  https://github.com/igormulyar/LCCS <br />
+
+
+</div>
+
+<div class='version-info-button'>
+  <span onmouseout="document.getElementById('version-info').style.display='none'" onmousemove="document.getElementById('version-info').style.display='inline'"><i class="fa fa-question-circle" aria-hidden="true"></i></span>
+</div>
 
 </body>
 
