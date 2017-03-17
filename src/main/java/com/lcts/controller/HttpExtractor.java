@@ -54,8 +54,10 @@ public class HttpExtractor {
                 resultCaseList.addAll(caseList.stream()
                         .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
                         .collect(Collectors.toList()));
+                System.out.println("LCTS: Search by number "+caseNumber+" completed!");
             });
             searchThread.start();
+            System.out.println("LCTS: New Thread started!");
             try {
                 searchThread.join();
             } catch (InterruptedException e) {
