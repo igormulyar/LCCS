@@ -32,7 +32,7 @@ public class HttpExtractor {
     }
 
     public List<CourtCase> extractCourtCases(List<String> allIds) {
-        List<CourtCase> resultCaseList = new ArrayList<>();
+        final List<CourtCase> resultCaseList = new ArrayList<>();
         for (String caseNumber : allIds) {
             Court court = null;
             try {
@@ -44,11 +44,25 @@ public class HttpExtractor {
             if (court == null) {
                 continue;
             }
-            List<CourtCase> caseList = getCourtCases(court);
+            /*List<CourtCase> caseList = getCourtCases(court);
             resultCaseList.addAll(caseList.stream()
                     .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList()));*/
+            final Court finalCourt = court;
+            Thread searchThread = new Thread(() -> {
+                List<CourtCase> caseList = getCourtCases(finalCourt);
+                resultCaseList.addAll(caseList.stream()
+                        .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
+                        .collect(Collectors.toList()));
+            });
+            searchThread.start();
+            try {
+                searchThread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+
         // this stream doesn't work correctly // TODO: Try to fix that stream
         /*List<CourtCase> list = allIds.stream()
                 .map(this::getCourtForRequest)
