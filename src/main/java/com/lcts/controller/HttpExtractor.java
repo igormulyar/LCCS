@@ -61,7 +61,7 @@ public class HttpExtractor {
             });
             threads.add(searchThread);
             searchThread.start();
-            System.out.println("LCTS: New Thread started!");
+            System.out.println("LCTS: New Thread started! Search by: "+caseNumber);
         }
 
         threads.forEach(t -> {
@@ -72,6 +72,7 @@ public class HttpExtractor {
             }
         });
 
+        System.out.println("Exit from fetching method");
         // this stream doesn't work correctly
         /*List<CourtCase> list = allIds.stream()
                 .map(this::getRelatedCourt)
