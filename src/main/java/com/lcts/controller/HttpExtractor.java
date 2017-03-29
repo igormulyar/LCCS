@@ -31,56 +31,65 @@ public class HttpExtractor {
         this.mapper = mapper;
     }
 
-    public List<CourtCase> extractCourtCases(List<String> allIds) {
+
+    public List<CourtCase> fetchCourtCases(List<String> allIds) {
         final List<CourtCase> resultCaseList = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+
+        //searching loop
         for (String caseNumber : allIds) {
             Court court = null;
             try {
-                court = getCourtForRequest(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
+                court = getRelatedCourt(caseNumber); //fetch required headers for http request (collected in controller.HttpExtractor.Court) using case number
             } catch (NoSuchElementException e) {
                 e.printStackTrace();
-                System.out.println("MESSAGE: Didn't find coincidence for number " + caseNumber + " when looking for court with court ID: " + caseNumber.substring(0, 3));      // to avoid application crashing when getCourtCases
+                System.out.println("MESSAGE: Didn't find coincidence for number " + caseNumber + " when looking for court with court ID: " + caseNumber.substring(0, 3));      // to avoid application crashing when getAllCasesInTheCourt
             }
+
             if (court == null) {
-                continue;
+                continue;           // cancel search if don't know the court where to search
             }
-            /*List<CourtCase> caseList = getCourtCases(court);
-            resultCaseList.addAll(caseList.stream()
-                    .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
-                    .collect(Collectors.toList()));*/
+
             final Court finalCourt = court;
+            // starting search in new thread (each number in separate thread)
             Thread searchThread = new Thread(() -> {
-                List<CourtCase> caseList = getCourtCases(finalCourt);
-                resultCaseList.addAll(caseList.stream()
+                List<CourtCase> allCasesInCourt = getAllCasesInTheCourt(finalCourt);
+                resultCaseList.addAll(allCasesInCourt.stream()
                         .filter(currentCase -> currentCase.getNumber().equals(caseNumber))
                         .collect(Collectors.toList()));
                 System.out.println("LCTS: Search by number "+caseNumber+" completed!");
             });
+            threads.add(searchThread);
             searchThread.start();
             System.out.println("LCTS: New Thread started!");
+        }
+
+        threads.forEach(t -> {
             try {
-                searchThread.join();
+                t.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }
+        });
 
-        // this stream doesn't work correctly // TODO: Try to fix that stream
+        // this stream doesn't work correctly
         /*List<CourtCase> list = allIds.stream()
-                .map(this::getCourtForRequest)
-                .map(this::getCourtCases)
+                .map(this::getRelatedCourt)
+                .map(this::getAllCasesInTheCourt)
                 .flatMap(List::stream)
                 .filter(courtCase -> allIds.contains(courtCase.getNumber()))
                 .collect(Collectors.toList());*/
         return resultCaseList;
     }
 
+
     /**
-     * This method makes a http POST-Request to the URL with headers and request body
+     *
+     * This method  (using the court properties) makes a http POST-Request to the URL with headers and request body
      * url, referer-header and courtId are parameters used in order to make a correct request
      * returns a list of court cases fetched from server
      */
-    private List<CourtCase> getCourtCases(Court court) {
+    private List<CourtCase> getAllCasesInTheCourt(Court court) {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
                 HttpClientBuilder.create().build());
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
@@ -110,7 +119,12 @@ public class HttpExtractor {
         }
     }
 
-    private Court getCourtForRequest(String caseNumber) {
+
+    /**
+     *
+     * Fetch json from file and map to Court objects, select the court that matches to caseNumber and return it
+     */
+    private Court getRelatedCourt(String caseNumber) {
         InputStream is = getClass().getResourceAsStream("/props/courts.json");
         try {
             return Arrays.stream(mapper.readValue(is, Court[].class))

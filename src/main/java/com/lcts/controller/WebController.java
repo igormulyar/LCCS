@@ -79,7 +79,7 @@ public class WebController {
         List<String> allIds = numberDTOList.stream()
                 .map(NumberTransferObject::getNumber)
                 .collect(Collectors.toList());
-        List<CourtCase> courtCases = extractor.extractCourtCases(allIds);
+        List<CourtCase> courtCases = extractor.fetchCourtCases(allIds);
         daoDatabase.saveCases(courtCases);
         return getExtendedCourtCases(numberDTOList);
     }
